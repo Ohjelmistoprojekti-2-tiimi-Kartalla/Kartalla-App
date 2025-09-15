@@ -1,17 +1,22 @@
-import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import MapScreen from "./MapScreen";
+import 'react-native-gesture-handler';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import MapScreen from './MapScreen';
+import FavouritesScreen from './FavouritesScreen';
+import SettingsScreen from './SettingsScreen';
 
-
-
-const Tab = createBottomTabNavigator();
+const Drawer = createDrawerNavigator();
 
 export default function App() {
-   return (
+  return (
     <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen name="Kartalla" component={MapScreen} />
-      </Tab.Navigator>
+      <Drawer.Navigator id="drawer-menu">
+        <Drawer.Screen name="Kartalla" component={MapScreen} />
+        <Drawer.Screen name="Suosikit" component={FavouritesScreen} />
+        <Drawer.Screen name="Asetukset" component={SettingsScreen} />
+      </Drawer.Navigator>
     </NavigationContainer>
   );
 }
+

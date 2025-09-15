@@ -1,6 +1,7 @@
 import { StyleSheet, View } from "react-native";
-import MapView, { Marker } from "react-native-maps";
-
+import MapView from "react-native-maps";
+import React, { useEffect } from "react";
+import { myMarkerComponent } from "./Components/MapMarkers";
 
 const styles = StyleSheet.create({
     container: {
@@ -13,6 +14,7 @@ const styles = StyleSheet.create({
 
 
 export default function MapScreen() {
+
     return (
         <View style={styles.container}>
             <MapView
@@ -26,10 +28,7 @@ export default function MapScreen() {
                     longitudeDelta: 0.1,
                 }}
             >
-                <Marker
-                    coordinate={{ latitude: 60.1699, longitude: 24.9384 }}
-                    title="Helsinki :3"
-                />
+                {myMarkerComponent()}
             </MapView>
         </View>
     );

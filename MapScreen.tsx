@@ -1,6 +1,6 @@
-import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
+import { StyleSheet, View, TouchableOpacity, Text, TextInput } from "react-native";
 import MapView from "react-native-maps";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { myMarkerComponent } from "./Components/MapMarkers";
 const data = require("./test.json");
 
@@ -32,10 +32,27 @@ const styles = StyleSheet.create({
     fontSize: 14,               
     fontWeight: "bold",
   },
+  searchBar: {
+    position: "absolute",
+    top: 20,
+    left: 10,
+    right: 10,
+    backgroundColor: "#fff",
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    elevation: 3,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+    zIndex: 1,
+  },
 });
 
 export default function MapScreen() {
   const mapRef = useRef<MapView>(null);
+  const [search, setSearch] = useState("");
 
   const handleRandomLocation = () => {
     const randomIndex = Math.floor(Math.random() * data.length);
@@ -53,6 +70,14 @@ export default function MapScreen() {
 
   return (
     <View style={styles.container}>
+      
+      <TextInput
+        style={styles.searchBar}
+        placeholder="Hae kohteita..."
+        value={search}
+        onChangeText={setSearch}
+      />  
+      
       <MapView
         ref={mapRef}
         style={styles.map}

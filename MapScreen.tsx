@@ -1,35 +1,77 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
 import MapView from "react-native-maps";
-import React, { useEffect } from "react";
+import React, { useRef } from "react";
 import { myMarkerComponent } from "./Components/MapMarkers";
+const data = require("./test.json");
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    map: {
-        flex: 1,
-    },
+  container: {
+    flex: 1,
+  },
+  map: {
+    flex: 1,
+  },
+  buttonContainer: {
+    position: "absolute",
+    bottom: 30,
+    alignSelf: "center",
+  },
+  button: {
+    backgroundColor: "#bbdaa4",    
+    paddingVertical: 4,            
+    paddingHorizontal: 14,         
+    borderRadius: 30,             
+    shadowColor: "#000000ff",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+    elevation: 4,
+  },
+  buttonText: {
+    color: "#655252ff",
+    fontSize: 14,               
+    fontWeight: "bold",
+  },
 });
 
-
 export default function MapScreen() {
+  const mapRef = useRef<MapView>(null);
 
-    return (
-        <View style={styles.container}>
-            <MapView
-                style={styles.map}
-                initialRegion={{
-
-                    // Helsingin koordinaatit
-                    latitude: 60.1699,   
-                    longitude: 24.9384,
-                    latitudeDelta: 0.1,
-                    longitudeDelta: 0.1,
-                }}
-            >
-                {myMarkerComponent()}
-            </MapView>
-        </View>
+  const handleRandomLocation = () => {
+    const randomIndex = Math.floor(Math.random() * data.length);
+    const location = data[randomIndex];
+    mapRef.current?.animateToRegion(
+      {
+        latitude: parseFloat(location.coordinates[0]),
+        longitude: parseFloat(location.coordinates[1]),
+        latitudeDelta: 0.1,
+        longitudeDelta: 0.1,
+      },
+      1000
     );
+  };
+
+  return (
+    <View style={styles.container}>
+      <MapView
+        ref={mapRef}
+        style={styles.map}
+        initialRegion={{
+          latitude: 60.1699,
+          longitude: 24.9384,
+          latitudeDelta: 0.1,
+          longitudeDelta: 0.1,
+        }}
+      >
+        {myMarkerComponent()}
+      </MapView>
+
+      {}
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.button} onPress={handleRandomLocation}>
+          <Text style={styles.buttonText}>Kokeile onneasi</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
 }

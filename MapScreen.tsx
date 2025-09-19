@@ -1,83 +1,110 @@
-import { StyleSheet, View, TouchableOpacity, Text, TextInput } from "react-native";
-import MapView from "react-native-maps";
-import React, { useRef, useState } from "react";
+import { View, TouchableOpacity, Text, TextInput } from "react-native";
+import MapView, { Marker } from "react-native-maps";
+import React, { use, useEffect, useRef, useState } from "react";
 import { myMarkerComponent } from "./Components/MapMarkers";
-const data = require("./test.json");
+import { styles } from "./styles";
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  map: {
-    flex: 1,
-  },
-  buttonContainer: {
-    position: "absolute",
-    bottom: 30,
-    alignSelf: "center",
-  },
-  button: {
-    backgroundColor: "#bbdaa4",    
-    paddingVertical: 4,            
-    paddingHorizontal: 14,         
-    borderRadius: 30,             
-    shadowColor: "#000000ff",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 3,
-    elevation: 4,
-  },
-  buttonText: {
-    color: "#655252ff",
-    fontSize: 14,               
-    fontWeight: "bold",
-  },
-  searchBar: {
-    position: "absolute",
-    top: 20,
-    left: 10,
-    right: 10,
-    backgroundColor: "#fff",
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderRadius: 8,
-    elevation: 3,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 3,
-    zIndex: 1,
-  },
-});
+const NATURE_LOCATIONS_JSON_URL = "http://lipas.cc.jyu.fi/api/sports-places?typeCodes=4404&typeCodes=4405&typeCodes=111&pageSize=100";
+// Luotopolku 4044, Retkeilyreitti 4405, Kansallispuisto 111 --> Voidaan lisätä muita samalla tavalla
+
+async function fetchFullNatureLocation(id: number) {
+  const url = `http://lipas.cc.jyu.fi/api/sports-places/${id}`;
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`Status code ${response.status}`);
+  }
+  return response.json(); // sisältää koko olion
+}
+
+async function fetchNatureLocations() {
+  const response = await fetch(NATURE_LOCATIONS_JSON_URL);
+  if (!response.ok) {
+    console.log(response);
+    throw new Error(`Received status code ${response.status}`);
+  }
+  const minimalData = await response.json(); // tällä saa vain kohteiden id:t
+
+  // Haetaan jokainen kohde erikseen, jotta saadaan location ja name
+  const fullData = await Promise.all(
+    minimalData.map((place: any) => fetchFullNatureLocation(place.sportsPlaceId))
+  );
+
+  return fullData;
+}
+
+// const data = require("./test.json"); // testailudatan haku
+
 
 export default function MapScreen() {
   const mapRef = useRef<MapView>(null);
   const [search, setSearch] = useState("");
+  const [locations, setLocations] = useState<any[]>([]);
 
-  const handleRandomLocation = () => {
-    const randomIndex = Math.floor(Math.random() * data.length);
-    const location = data[randomIndex];
-    mapRef.current?.animateToRegion(
-      {
-        latitude: parseFloat(location.coordinates[0]),
-        longitude: parseFloat(location.coordinates[1]),
-        latitudeDelta: 0.1,
-        longitudeDelta: 0.1,
-      },
-      1000
-    );
-  };
+  useEffect(() => {
+    const fetchAndSetLocations = async () => {
+      try {
+        const data = await fetchNatureLocations();
+
+
+        // *-----------Testilogituksia--------------*
+        console.log("Saadut kohteet:", data.length); // Varmistetaan, että data on saatu
+        // Logataan jokainen kohde ja ensimmäinen koordinaatti
+        data.forEach((place, index) => {
+          const firstFeature = place.location?.geometries?.features?.[0];
+          let lat: number | undefined;
+          let lon: number | undefined;
+
+          if (firstFeature?.geometry.type === "Point") {
+            [lon, lat] = firstFeature.geometry.coordinates as number[];
+          } else if (firstFeature?.geometry.type === "LineString") {
+            [lon, lat] = (firstFeature.geometry.coordinates as number[][])[0];
+          }
+
+          const name =
+            place.name ||
+            place["name-localized"]?.fi ||
+            place["name-localized"]?.en ||
+            "Nimetön";
+
+          console.log(`${index + 1}: ${name}, coords: ${lat}, ${lon}`);
+        });
+
+        // *-----------Testilogituksia--------------*
+
+        setLocations(data);
+      } catch (error) {
+        console.error("Error fetching locations:", error);
+      } fetchNatureLocations()
+
+    };
+    fetchAndSetLocations();
+  }, []);
+
+
+  // const handleRandomLocation = () => {
+  //   const randomIndex = Math.floor(Math.random() * data.length);
+  //   const location = data[randomIndex];
+  //   mapRef.current?.animateToRegion(
+  //     {
+  //       latitude: parseFloat(location.coordinates[0]),
+  //       longitude: parseFloat(location.coordinates[1]),
+  //       latitudeDelta: 0.1,
+  //       longitudeDelta: 0.1,
+  //     },
+  //     1000
+  //   );
+  // };
 
   return (
     <View style={styles.container}>
-      
+
       <TextInput
         style={styles.searchBar}
         placeholder="Hae kohteita..."
         value={search}
         onChangeText={setSearch}
-      />  
-      
+      />
+
       <MapView
         ref={mapRef}
         style={styles.map}
@@ -88,15 +115,41 @@ export default function MapScreen() {
           longitudeDelta: 0.1,
         }}
       >
-        {myMarkerComponent()}
+        {locations.map((place, index) => {
+          const firstFeature = place.location?.geometries?.features?.[0];
+          if (!firstFeature) return null;
+
+          let lat: number | undefined;
+          let lon: number | undefined;
+
+          // Rajapinnasta tulee kahdenlaisia geometrioita: Point ja LineString, pitää käsitellä molemmat
+          if (firstFeature.geometry.type === "Point") {
+            [lon, lat] = firstFeature.geometry.coordinates as number[];
+          } else if (firstFeature.geometry.type === "LineString") {
+            [lon, lat] = (firstFeature.geometry.coordinates as number[][])[0];
+          }
+
+          if (lat === undefined || lon === undefined) return null;
+
+          return (
+            <Marker
+              key={index}
+              coordinate={{ latitude: lat, longitude: lon }}
+              title={place.name || place['name-localized']?.fi || "Nimetön"}
+            />
+          );
+        })}
+
+
+        {/* {myMarkerComponent()} */}
       </MapView>
 
-      {}
-      <View style={styles.buttonContainer}>
+      { }
+      {/* <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button} onPress={handleRandomLocation}>
           <Text style={styles.buttonText}>Kokeile onneasi</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
     </View>
   );
 }

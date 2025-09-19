@@ -1,10 +1,10 @@
 import { View, TouchableOpacity, Text, TextInput } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import React, { use, useEffect, useRef, useState } from "react";
-import { MarkerComponent } from "./Components/MapMarkers";
-import { styles } from "./styles";
-import { fetchNatureLocations } from "./services/lipasService";
-import { Location } from "./types/Location";
+import { MarkerComponent } from "../Components/MapMarkers";
+import { styles } from "../styles";
+import { fetchNatureLocations } from "../services/lipasService";
+import { Location } from "../types/Location";
 
 export default function MapScreen() {
   const mapRef = useRef<MapView>(null);

@@ -11,7 +11,7 @@ const Drawer = createDrawerNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Drawer.Navigator id="drawer-menu">
+      <Drawer.Navigator id={undefined}>
         <Drawer.Screen name="Kartalla" component={MapScreen} />
         <Drawer.Screen name="Suosikit" component={FavouritesScreen} />
         <Drawer.Screen name="Asetukset" component={SettingsScreen} />

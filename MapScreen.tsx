@@ -4,11 +4,12 @@ import React, { use, useEffect, useRef, useState } from "react";
 import { MarkerComponent } from "./Components/MapMarkers";
 import { styles } from "./styles";
 import { fetchNatureLocations } from "./services/lipasService";
+import { Location } from "./types/Location";
 
 export default function MapScreen() {
   const mapRef = useRef<MapView>(null);
   const [search, setSearch] = useState("");
-  const [locations, setLocations] = useState<any[]>([]);
+  const [locations, setLocations] = useState<Location[]>([]);
 
   useEffect(() => {
     const fetchAndSetLocations = async () => {

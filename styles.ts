@@ -45,4 +45,26 @@ export const styles = StyleSheet.create({
     zIndex: 1,
   },
 
+  floatingButton: {
+  position: "absolute",
+  bottom: 20,
+  right: 20,
+  backgroundColor: "#bbdaa4",    
+  width: 55,
+  height: 55,
+  borderRadius: 30,
+  alignItems: "center",
+  justifyContent: "center",
+  shadowColor: "#000",
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.3,
+  shadowRadius: 3,
+  elevation: 4,
+},
+floatingButtonText: {
+  fontSize: 22,
+  fontWeight: "bold",
+  color: "#655252ff",
+},
+
 });

@@ -66,5 +66,10 @@ floatingButtonText: {
   fontWeight: "bold",
   color: "#655252ff",
 },
+markerCallout:{
+  height:40,
+  width:80,
+  
+}
 
 });

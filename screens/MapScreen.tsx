@@ -6,25 +6,17 @@ import { styles } from "../styles";
 import { fetchNatureLocations } from "../services/lipasService";
 import { Location } from "../types/Location";
 import * as LocationApi from "expo-location";
+import { getBoundingBoxFromLocation } from "../utils/mapUtils";
 
 export default function MapScreen() {
   const mapRef = useRef<MapView>(null);
   const [search, setSearch] = useState("");
   const [locations, setLocations] = useState<Location[]>([]);
   const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(null);
+  const [locationsInBounds, setLocationsInBounds] = useState<Location[]>([]);
 
-  useEffect(() => {
-    const fetchAndSetLocations = async () => {
-      try {
-        const data = await fetchNatureLocations();
-        setLocations(data);
-      } catch (error) {
-        console.error("Error fetching locations:", error);
-      }
-    };
-    fetchAndSetLocations();
-  }, []);
 
+  // Get users location:
   useEffect(() => {
     (async () => {
       let { status } = await LocationApi.requestForegroundPermissionsAsync();
@@ -38,9 +30,41 @@ export default function MapScreen() {
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
       });
+
+      handleMapReady(); // kutsutaan kun käyttäjän sijainti on saatu
+
+      // Focus map to user location
+      if (mapRef.current) {
+        mapRef.current.animateToRegion(
+          {
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+            latitudeDelta: 0.1,
+            longitudeDelta: 0.1,
+          },
+          1000
+        );
+      }
     })();
   }, []);
 
+
+  // Once the map is rendered determine bounding box and fetch locations
+  const handleMapReady = async () => {
+    if (!mapRef.current || !userLocation) return;
+
+    // Muodostetaan bounding box 100 km säteelle käyttäjästä --> voi muokata myöhemmin
+    const bounds = getBoundingBoxFromLocation(userLocation.latitude, userLocation.longitude, 100);
+
+    const data = await fetchNatureLocations(bounds);
+    // const data = await fetchNatureLocations(); // tällä voi testata näyttää kaikki 100 kpl
+
+    setLocationsInBounds(data);
+    console.log("Bounding box for 100 km:", bounds);
+    console.log("Fetched locations:", data.length);
+  };
+
+  // Showing users location on button press
   const handleShowMyLocation = async () => {
     if (userLocation && mapRef.current) {
       mapRef.current.animateToRegion(
@@ -92,8 +116,9 @@ export default function MapScreen() {
             longitudeDelta: 0.1,
           }
         }
+        onMapReady={handleMapReady} // bounding box -search once the map is ready
       >
-        <MarkerComponent locations={locations} />
+        <MarkerComponent locations={locationsInBounds} />
 
 
         {/* current location  */}
@@ -117,7 +142,7 @@ export default function MapScreen() {
       </View> */}
 
 
-{/* Floating button on the bottom corner for user location */}
+      {/* Floating button on the bottom corner for user location */}
       <TouchableOpacity style={styles.floatingButton} onPress={handleShowMyLocation}>
         <Text style={styles.floatingButtonText}>📍</Text>
       </TouchableOpacity>

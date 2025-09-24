@@ -1,4 +1,4 @@
-import {  Marker } from "react-native-maps";
+import { Marker } from "react-native-maps";
 import { Location } from "../types/Location";
 import { Alert, Text, View } from "react-native";
 import { getCoordinates } from "../utils/mapUtils";
@@ -9,10 +9,6 @@ interface Props {
 }
 
 export const MarkerComponent: React.FC<Props> = ({ locations }) => {
-  const selectedMarker = (place:any) => {
-    Alert.alert(
-      place.name, place.location.address)
-  }
     console.log("MarkerComponent render, locations:", locations.length);
     return (
         <>
@@ -25,10 +21,15 @@ export const MarkerComponent: React.FC<Props> = ({ locations }) => {
                         key={location.sportsPlaceId}
                         coordinate={{ latitude: coords.lat, longitude: coords.lon }}
                         title={location.name || location['name-localized']?.fi || "Ei nimeä saatavilla"}
+                        onPress={() => {
+                            Alert.alert(
+                                location.name || "Ei nimeä",
+                                location.location.address || "Ei osoitetta"
+                            );
+                        }}
                     />
-                     
                 );
             })}
         </>
     );
-}
+};

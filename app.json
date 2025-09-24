@@ -14,7 +14,7 @@
     },
     "ios": {
       "config": {
-        "googleMapsApiKey": "AIzaSyCbBzchvjxTE0spySqDyj7plBhSOQR_vKI"
+        "googleMapsApiKey": "cross-env GoogleApi_Key"
       },
       "supportsTablet": true
     },
@@ -25,7 +25,7 @@
       },
       "config": {
         "googleMaps": {
-          "apiKey": "AIzaSyCbBzchvjxTE0spySqDyj7plBhSOQR_vKI"
+          "apiKey": "cross-env GoogleApi_Key"
         }
       },
       "edgeToEdgeEnabled": true

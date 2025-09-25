@@ -1,3 +1,4 @@
+import SearchBar from "../Components/SearchBar";
 import { View, TouchableOpacity, Text, TextInput } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import React, { use, useEffect, useRef, useState } from "react";
@@ -96,13 +97,7 @@ export default function MapScreen() {
 
   return (
     <View style={styles.container}>
-
-      <TextInput
-        style={styles.searchBar}
-        placeholder="Hae kohteita..."
-        value={search}
-        onChangeText={setSearch}
-      />
+      <SearchBar value={search} onChangeText={setSearch} />
 
       {/* Fix to be the users location */}
       <MapView

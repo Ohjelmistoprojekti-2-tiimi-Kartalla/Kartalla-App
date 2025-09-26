@@ -1,6 +1,6 @@
 import { Marker } from "react-native-maps";
 import { Location } from "../types/Location";
-import { Alert, Text, View } from "react-native";
+import { Alert, Button, Text, View } from "react-native";
 import { getCoordinates } from "../utils/mapUtils";
 
 //Komponetti saa datan propsina:
@@ -24,7 +24,19 @@ export const MarkerComponent: React.FC<Props> = ({ locations }) => {
                         onPress={() => {
                             Alert.alert(
                                 location.name || "Ei nimeä",
-                                location.location.address || "Ei osoitetta"
+                                location.location.address || "Ei osoitetta",
+                                [
+                                    {
+                                        text: 'Show More',
+                                        onPress: () => console.log("function not implemented")
+                                    },
+                                    {
+                                        text: 'Cancel',
+                                        onPress: () => console.log("Cancel pressed"),
+                                        style: 'cancel',
+                                    },
+                                ],
+                                 {cancelable: true,}
                             );
                         }}
                     />

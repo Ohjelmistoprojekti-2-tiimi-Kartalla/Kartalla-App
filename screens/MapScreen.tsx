@@ -8,6 +8,8 @@ import { fetchNatureLocations } from "../services/lipasService";
 import { Location } from "../types/Location";
 import * as LocationApi from "expo-location";
 import { getBoundingBoxFromLocation } from "../utils/mapUtils";
+import { getCoordinates } from "../utils/mapUtils";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function MapScreen() {
   const mapRef = useRef<MapView>(null);
@@ -83,20 +85,30 @@ export default function MapScreen() {
     }
   };
 
-  // TO DO: Fix
-  // const handleRandomLocation = () => {
-  //   const randomIndex = Math.floor(Math.random() * data.length);
-  //   const location = data[randomIndex];
-  //   mapRef.current?.animateToRegion(
-  //     {
-  //       latitude: parseFloat(location.coordinates[0]),
-  //       longitude: parseFloat(location.coordinates[1]),
-  //       latitudeDelta: 0.1,
-  //       longitudeDelta: 0.1,
-  //     },
-  //     1000
-  //   );
-  // };
+  // ---------------Satunnaisen kohteen näyttäminen -----------------------------------------//
+  const markerRefs = useRef<{ [key: number]: any | null }>({});
+
+  const handleRandomLocation = () => {
+    const randomIndex = Math.floor(Math.random() * locationsInBounds.length);
+    const location = locationsInBounds[randomIndex];
+    const coordinates = getCoordinates(location);
+    mapRef.current?.animateToRegion(
+      {
+        latitude: coordinates?.lat,
+        longitude: coordinates?.lon,
+        latitudeDelta: 0.1,
+        longitudeDelta: 0.1,
+      },
+      1000
+    );
+
+    // Pieni viive, jotta kartta ehtii liikkua, sitten näytetään callout: eli kohteen nimi
+    setTimeout(() => {
+      markerRefs.current[location.sportsPlaceId]?.showCallout();
+    }, 1000);
+  };
+
+  // ---------------------------------------------------------------------------------------//
 
   return (
     <View style={styles.container}>
@@ -116,7 +128,7 @@ export default function MapScreen() {
         }
         onMapReady={handleMapReady} // bounding box -search once the map is ready
       >
-        <MarkerComponent locations={locationsInBounds} />
+        <MarkerComponent locations={locationsInBounds} markerRefs={markerRefs} />
 
 
         {/* current location  */}
@@ -133,11 +145,11 @@ export default function MapScreen() {
       </MapView>
 
       { }
-      {/* <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={handleRandomLocation}>
-          <Text style={styles.buttonText}>Kokeile onneasi</Text>
+      <View style={styles.randomButtonContainer}>
+        <TouchableOpacity style={styles.randomButton} onPress={handleRandomLocation}>
+          <Ionicons name="shuffle-outline" size={24} color="black" />
         </TouchableOpacity>
-      </View> */}
+      </View>
 
 
       {/* Floating button on the bottom corner for user location */}

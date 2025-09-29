@@ -1,5 +1,7 @@
 import { StyleSheet } from "react-native";
 
+// valkoinen: #F3F4F4
+
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -7,26 +9,22 @@ export const styles = StyleSheet.create({
   map: {
     flex: 1,
   },
-  buttonContainer: {
+  randomButtonContainer: {
     position: "absolute",
-    bottom: 30,
-    alignSelf: "center",
+    top: 70,
+    left: 15,
+    alignSelf: "flex-start",
   },
-  button: {
-    backgroundColor: "#bbdaa4",
+  randomButton: {
+    backgroundColor: "#F3F4F4",
     paddingVertical: 4,
-    paddingHorizontal: 14,
-    borderRadius: 30,
+    paddingHorizontal: 7,
+    borderRadius: 40,
     shadowColor: "#000000ff",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 3,
     elevation: 4,
-  },
-  buttonText: {
-    color: "#655252ff",
-    fontSize: 14,
-    fontWeight: "bold",
   },
   searchBar: {
     position: "absolute",

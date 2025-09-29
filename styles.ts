@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 
-export const styles = StyleSheet.create({ 
-    container: {
+export const styles = StyleSheet.create({
+  container: {
     flex: 1,
   },
   map: {
@@ -13,10 +13,10 @@ export const styles = StyleSheet.create({
     alignSelf: "center",
   },
   button: {
-    backgroundColor: "#bbdaa4",    
-    paddingVertical: 4,            
-    paddingHorizontal: 14,         
-    borderRadius: 30,             
+    backgroundColor: "#bbdaa4",
+    paddingVertical: 4,
+    paddingHorizontal: 14,
+    borderRadius: 30,
     shadowColor: "#000000ff",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
@@ -25,7 +25,7 @@ export const styles = StyleSheet.create({
   },
   buttonText: {
     color: "#655252ff",
-    fontSize: 14,               
+    fontSize: 14,
     fontWeight: "bold",
   },
   searchBar: {
@@ -46,30 +46,33 @@ export const styles = StyleSheet.create({
   },
 
   floatingButton: {
-  position: "absolute",
-  bottom: 20,
-  right: 20,
-  backgroundColor: "#bbdaa4",    
-  width: 55,
-  height: 55,
-  borderRadius: 30,
-  alignItems: "center",
-  justifyContent: "center",
-  shadowColor: "#000",
-  shadowOffset: { width: 0, height: 2 },
-  shadowOpacity: 0.3,
-  shadowRadius: 3,
-  elevation: 4,
-},
-floatingButtonText: {
-  fontSize: 22,
-  fontWeight: "bold",
-  color: "#655252ff",
-},
-markerCallout:{
-  height:40,
-  width:80,
-  
-}
-
+    position: "absolute",
+    bottom: 20,
+    right: 20,
+    backgroundColor: "#bbdaa4",
+    width: 55,
+    height: 55,
+    borderRadius: 30,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+    elevation: 4,
+  },
+  floatingButtonText: {
+    fontSize: 22,
+    fontWeight: "bold",
+    color: "#655252ff",
+  },
+  markerCallout: {
+    height: 40,
+    width: 80,
+  },
+  h1: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
 });

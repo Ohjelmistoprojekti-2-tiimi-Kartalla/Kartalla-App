@@ -12,9 +12,10 @@ import { getBoundingBoxFromLocation } from "../utils/mapUtils";
 export default function MapScreen() {
   const mapRef = useRef<MapView>(null);
   const [search, setSearch] = useState("");
-  const [locations, setLocations] = useState<Location[]>([]);
+  // const [locations, setLocations] = useState<Location[]>([]);
   const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(null);
   const [locationsInBounds, setLocationsInBounds] = useState<Location[]>([]);
+  const [mapReady, setMapReady] = useState(false);
 
 
   // Get users location:
@@ -32,8 +33,6 @@ export default function MapScreen() {
         longitude: location.coords.longitude,
       });
 
-      handleMapReady(); // kutsutaan kun käyttäjän sijainti on saatu
-
       // Focus map to user location
       if (mapRef.current) {
         mapRef.current.animateToRegion(
@@ -49,20 +48,24 @@ export default function MapScreen() {
     })();
   }, []);
 
+  useEffect(() => {
+    if (!userLocation || !mapReady) return;
 
-  // Once the map is rendered determine bounding box and fetch locations
+    const fetchLocations = async () => {
+      const bounds = getBoundingBoxFromLocation(userLocation.latitude, userLocation.longitude, 100); // 100 km
+      const data = await fetchNatureLocations(bounds);
+      setLocationsInBounds(data);
+      console.log("Bounding box for 100 km:", bounds);
+      console.log("Fetched locations:", data.length);
+    };
+
+    fetchLocations();
+  }, [userLocation, mapReady]);
+
+
+  // Makes sure map is ready before fetching locations
   const handleMapReady = async () => {
-    if (!mapRef.current || !userLocation) return;
-
-    // Muodostetaan bounding box 100 km säteelle käyttäjästä --> voi muokata myöhemmin
-    const bounds = getBoundingBoxFromLocation(userLocation.latitude, userLocation.longitude, 100);
-
-    const data = await fetchNatureLocations(bounds);
-    // const data = await fetchNatureLocations(); // tällä voi testata näyttää kaikki 100 kpl
-
-    setLocationsInBounds(data);
-    console.log("Bounding box for 100 km:", bounds);
-    console.log("Fetched locations:", data.length);
+    setMapReady(true);
   };
 
   // Showing users location on button press

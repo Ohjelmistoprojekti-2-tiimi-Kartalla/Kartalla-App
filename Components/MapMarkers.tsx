@@ -2,14 +2,21 @@ import { Marker } from "react-native-maps";
 import { Location } from "../types/Location";
 import { Alert, Button, Text, View } from "react-native";
 import { getCoordinates } from "../utils/mapUtils";
+import { useNavigation } from "@react-navigation/native";
+import type { StackNavigationProp } from '@react-navigation/stack';
 
 //Komponetti saa datan propsina:
 interface Props {
     locations: Location[];
 }
+// Reitin tyypin määrittely navigaatiota varten
+type RootStackParamList = {
+    DestinationDetails: { location: Location };
+};
 
 export const MarkerComponent: React.FC<Props> = ({ locations }) => {
-    console.log("MarkerComponent render, locations:", locations.length);
+    const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+    console.log("Renderöitäviä markkereita:", locations.length);
     return (
         <>
             {locations.map((location) => {
@@ -28,7 +35,8 @@ export const MarkerComponent: React.FC<Props> = ({ locations }) => {
                                 [
                                     {
                                         text: 'Show More',
-                                        onPress: () => console.log("function not implemented")
+                                        onPress: () =>
+                                            navigation.navigate("DestinationDetails", { location })
                                     },
                                     {
                                         text: 'Cancel',
@@ -36,7 +44,7 @@ export const MarkerComponent: React.FC<Props> = ({ locations }) => {
                                         style: 'cancel',
                                     },
                                 ],
-                                 {cancelable: true,}
+                                { cancelable: true }
                             );
                         }}
                     />

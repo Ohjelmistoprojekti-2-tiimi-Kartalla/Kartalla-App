@@ -5,17 +5,13 @@ import { Location } from "../types/Location";
 // palauttaa neliön muotoisen bounding boxin annetun pisteen ympärille
 export function getBoundingBoxFromLocation(lat: number, lon: number, deltaKm = 50) {
 
-  // 1 astetta leveys = ~111 km
-  const deltaLat = deltaKm / 111;
-
-  // 1 astetta pituus = 111 * cos(lat) km
-  const deltaLon = deltaKm / (111 * Math.cos((lat * Math.PI) / 180));
+  const delta = deltaKm / 111;
 
   return {
-    north: lat + deltaLat,
-    south: lat - deltaLat,
-    east: lon + deltaLon,
-    west: lon - deltaLon,
+    north: lat + delta,
+    south: lat - delta,
+    east: lon + delta,
+    west: lon - delta,
   };
 }
 

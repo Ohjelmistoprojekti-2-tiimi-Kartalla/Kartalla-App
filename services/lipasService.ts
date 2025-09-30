@@ -1,7 +1,7 @@
 import { Location } from "../types/Location";
 import { getCoordinates } from "../utils/mapUtils";
 
-const NATURE_LOCATIONS_JSON_URL = "http://lipas.cc.jyu.fi/api/sports-places?typeCodes=4404&typeCodes=4405&typeCodes=111&pageSize=100";
+const NATURE_LOCATIONS_JSON_URL = "http://lipas.cc.jyu.fi/api/sports-places?typeCodes=4404&typeCodes=4405&typeCodes=111&pageSize=100&page=";
 // Luotopolku 4044, Retkeilyreitti 4405, Kansallispuisto 111 --> Voidaan lisätä muita samalla tavalla
 
 export async function fetchFullNatureLocation(id: number): Promise<Location> {
@@ -21,16 +21,22 @@ export interface BoundingBox {
 }
 
 export async function fetchNatureLocations(bounds?: BoundingBox): Promise<Location[]> {
-    const response = await fetch(NATURE_LOCATIONS_JSON_URL);
+    let allMinimalData: any[] = []
+    for (let i = 1; i < 17; i++){
+            const response = await fetch(NATURE_LOCATIONS_JSON_URL+i);
     if (!response.ok) {
         console.log(response);
         throw new Error(`Received status code ${response.status}`);
+        console.log(i)
     }
     const minimalData = await response.json(); // this gets only the id:s
+    allMinimalData = allMinimalData.concat(minimalData)
+    }
+
 
     // Fetch each location separately to get location and name, this fetches 100 locations
     const data = await Promise.all(
-        minimalData.map((location: any) => fetchFullNatureLocation(location.sportsPlaceId))
+        allMinimalData.map((location: any) => fetchFullNatureLocation(location.sportsPlaceId))
     );
 
     // Filter locations within bounds

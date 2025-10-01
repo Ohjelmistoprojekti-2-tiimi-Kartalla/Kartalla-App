@@ -147,15 +147,14 @@ export default function MapScreen() {
       { }
       <View style={styles.randomButtonContainer}>
         <TouchableOpacity style={styles.randomButton} onPress={handleRandomLocation}>
-          <Ionicons name="shuffle-outline" size={24} color="black" />
+          <Ionicons name="shuffle-outline" size={26} color="#0E1815" />
         </TouchableOpacity>
       </View>
-
-
-      {/* Floating button on the bottom corner for user location */}
-      <TouchableOpacity style={styles.floatingButton} onPress={handleShowMyLocation}>
-        <Text style={styles.floatingButtonText}>📍</Text>
+      <View style={styles.myLocationButtonContainer}>
+      <TouchableOpacity style={styles.myLocationButton} onPress={handleShowMyLocation}>
+        <Ionicons name="navigate-outline" size={26} color="#0E1815" />
       </TouchableOpacity>
+      </View>
     </View>
   );
 }

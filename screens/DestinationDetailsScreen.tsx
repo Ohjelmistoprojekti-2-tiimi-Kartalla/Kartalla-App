@@ -1,7 +1,9 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
-import { RouteProp } from "@react-navigation/native";
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, Image, Button } from 'react-native';
+import { RouteProp, useNavigation } from "@react-navigation/native";
+import type { StackNavigationProp } from '@react-navigation/stack';
 import { Location } from "../types/Location";
+import { addToFavorites, removeFromFavorites, getFavoriteLocations } from '../utils/favoritesStorage';
 
 // määritellään reitit
 type RootStackParamList = {
@@ -20,6 +22,24 @@ interface Props {
 
 const DestinationDetailsScreen: React.FC<Props> = ({ route }) => {
   const { location } = route.params;
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  useEffect(() => {
+    getFavoriteLocations().then((favorites) => {
+      setIsFavorite(favorites.some((fav) => fav.sportsPlaceId === location.sportsPlaceId));
+    });
+  }, [location]);
+
+  const toggleFavorite = async () => {
+    if (isFavorite) {
+      await removeFromFavorites(location.sportsPlaceId);
+      setIsFavorite(false);
+    } else {
+      await addToFavorites(location);
+      setIsFavorite(true);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -33,6 +53,13 @@ const DestinationDetailsScreen: React.FC<Props> = ({ route }) => {
           style={styles.headerImage}
         />
       </View>
+
+      <Text style={styles.info}>{location.location.address || 'Ei osoitetta'}</Text>
+      {location.properties?.infoFi && <Text style={styles.info}>{location.properties.infoFi}</Text>}
+      <Button
+        title={isFavorite ? 'Poista suosikeista' : 'Lisää suosikkeihin'}
+        onPress={toggleFavorite}
+      />
     </View>
   );
 };
@@ -65,6 +92,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',    
     alignSelf: 'center',
     fontFamily: 'serif', // <-- lisää tämä rivi
+  },
+   info: {
+    color: '#fff',
+    fontSize: 16,
+    marginBottom: 8,
+    textAlign: 'center',
   },
 });
 

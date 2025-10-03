@@ -1,4 +1,7 @@
 export type Location = {
+    description: string
+    id: number;
+    images: any[];
     sportsPlaceId: number;
     name: string;
     type: {

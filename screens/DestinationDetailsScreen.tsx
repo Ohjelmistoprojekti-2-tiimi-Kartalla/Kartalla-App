@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, Button } from 'react-native';
 import { RouteProp, useNavigation } from "@react-navigation/native";
 import type { StackNavigationProp } from '@react-navigation/stack';
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, Dimensions, Modal } from 'react-native';
-import { RouteProp, useNavigation } from "@react-navigation/native";
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, Dimensions, Modal, Button } from 'react-native';
 import { Location } from "../types/Location";
 import { addToFavorites, removeFromFavorites, getFavoriteLocations } from '../utils/favoritesStorage';
 
@@ -32,23 +29,53 @@ interface Props {
 
 const mockLocation: Location = {
   id: 1,
-  name: "Mock lokaatio jossakin", 
-  coordinates: [60.1699, 24.9384],
+  name: "Mock lokaatio jossakin",
   description: "Kuvankaunis polku, joka kulkee tiheän mäntymetsän läpi. Reitti polveilee virtaavan joen varrella. Matkan varrella on useita näköalapaikkoja. Huikea reitti :D",
   images: [
     require('../assets/luontopolku.png'),
     require('../assets/luontopolku2.jpg'),
     require('../assets/maisema.png')
   ],
-  address: "Luontopolku 23, 56700 Padasjoki"
+  sportsPlaceId: 123,
+  type: {
+    typeCode: 1,
+    name: "Luontopolku"
+  },
+  location: {
+    address: "Luontopolku 23, 56700 Padasjoki",
+    city: {
+      name: "Padasjoki",
+      postalCode: "56700",
+      postalOffice: "Padasjoki"
+    },
+    coordinates: {
+      wgs84: {
+        lat: 60.1699,
+        lon: 24.9384
+      }
+    },
+    geometries: {
+      type: "FeatureCollection",
+      features: []
+    }
+  },
+  properties: {
+    infoFi: "Lisätietoa reitistä",
+    routeLengthKm: 2.3,
+    www: "https://esimerkki.fi"
+  }
 };
 
 const screenWidth = Dimensions.get('window').width;
 
 const DestinationDetailsScreen: React.FC<Props> = ({ route }) => {
-  const { location } = route.params;
+
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const [isFavorite, setIsFavorite] = useState(false);
+
+  const location = route?.params?.location?.description
+  ? route.params.location
+  : mockLocation;
 
   useEffect(() => {
     getFavoriteLocations().then((favorites) => {
@@ -65,16 +92,13 @@ const DestinationDetailsScreen: React.FC<Props> = ({ route }) => {
       setIsFavorite(true);
     }
   };
-  const location = route?.params?.location?.description
-    ? route.params.location
-    : mockLocation;
   const [activeIndex, setActiveIndex] = useState(0);
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewIndex, setPreviewIndex] = useState(0);
   const [isSaved, setIsSaved] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [isVisited, setIsVisited] = useState(false);
-  const navigation = useNavigation();
+  
 
   // Mock rating 
   const rating = 4.7;
@@ -85,19 +109,7 @@ const DestinationDetailsScreen: React.FC<Props> = ({ route }) => {
       <Text style={styles.title}>{location.name}</Text>
 
       {/* Header-kuvat */}
-      <View style={styles.imageRow}>
-        <Image
-          source={require('../assets/maisema.png')}
-          style={styles.headerImage}
-        />
-      </View>
-
-      <Text style={styles.info}>{location.location.address || 'Ei osoitetta'}</Text>
-      {location.properties?.infoFi && <Text style={styles.info}>{location.properties.infoFi}</Text>}
-      <Button
-        title={isFavorite ? 'Poista suosikeista' : 'Lisää suosikkeihin'}
-        onPress={toggleFavorite}
-      />
+  
       <ScrollView showsVerticalScrollIndicator={false}>
         <ImageCarousel
           images={location.images}
@@ -431,6 +443,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 8,
     textAlign: 'center',
+  },
+  imageRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginBottom: 16,
+  },
+  headerImage: {
+    width: screenWidth,
+    height: 180,
+    borderRadius: 16,
+    alignSelf: 'center',
+    resizeMode: 'cover',
+    marginBottom: 10,
   },
 });
 

@@ -10,6 +10,7 @@ import * as LocationApi from "expo-location";
 import { getBoundingBoxFromLocation } from "../utils/mapUtils";
 import { getCoordinates } from "../utils/mapUtils";
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
 export default function MapScreen() {
   const mapRef = useRef<MapView>(null);

@@ -1,31 +1,31 @@
-import { Marker } from "react-native-maps";
+import { Marker, Callout } from "react-native-maps";
 import { Location } from "../types/Location";
-import { Alert, Button, Text, View } from "react-native";
 import { getCoordinates } from "../utils/mapUtils";
 import { useNavigation } from "@react-navigation/native";
 import type { StackNavigationProp } from '@react-navigation/stack';
-import { useRef } from "react";
+import React from "react";
 
 //Komponetti saa datan propsina:
 interface Props {
     locations: Location[];
     markerRefs: React.MutableRefObject<{ [key: number]: any | null }>;
+    onMarkerPress: (location: Location) => void; // callback modaalin avaamiseen
 }
 // Reitin tyypin määrittely navigaatiota varten
 type RootStackParamList = {
     DestinationDetails: { location: Location };
 };
 
-export const MarkerComponent: React.FC<Props> = ({ locations, markerRefs }) => {
+export const MarkerComponent: React.FC<Props> = ({ locations, markerRefs, onMarkerPress }) => {
     const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-    
+
     // tämän avulla randomkohteeseen hypätessä näytetään kohteen nimi
     const handleMarkerPress = (id: number) => {
-    const marker = markerRefs.current[id];
-    if (marker) {
-      marker.showCallout(); // näyttää markkerin nimen calloutissa
-    }
-  };
+        const marker = markerRefs.current[id];
+        if (marker) {
+            marker.showCallout(); // näyttää markkerin nimen calloutissa
+        }
+    };
 
     console.log("Renderöitäviä markkereita:", locations.length);
     return (
@@ -37,31 +37,13 @@ export const MarkerComponent: React.FC<Props> = ({ locations, markerRefs }) => {
                 return (
                     <Marker
                         ref={ref => { markerRefs.current[location.sportsPlaceId] = ref; }}
-                        key={location.sportsPlaceId}
                         coordinate={{ latitude: coords.lat, longitude: coords.lon }}
                         title={location.name || location['name-localized']?.fi || "Ei nimeä saatavilla"}
-                        onPress={() => {
-                            Alert.alert(
-                                location.name || "Ei nimeä",
-                                location.location.address || "Ei osoitetta",
-                                [
-                                    {
-                                        text: 'Show More',
-                                        onPress: () =>
-                                            navigation.navigate("DestinationDetails", { location })
-                                    },
-                                    {
-                                        text: 'Cancel',
-                                        onPress: () => console.log("Cancel pressed"),
-                                        style: 'cancel',
-                                    },
-                                ],
-                                { cancelable: true }
-                            );
-                        }}
+                        key={location.sportsPlaceId}
+                        onPress={() => onMarkerPress(location)} // MapScreen käsittelee modaalin avaamisen
                     />
                 );
             })}
         </>
     );
-};
+}

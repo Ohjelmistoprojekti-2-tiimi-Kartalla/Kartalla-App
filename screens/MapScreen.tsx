@@ -1,7 +1,7 @@
 import SearchBar from "../Components/SearchBar";
-import { View, TouchableOpacity, Text, TextInput } from "react-native";
+import { View, TouchableOpacity } from "react-native";
 import MapView, { Marker } from "react-native-maps";
-import React, { use, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { MarkerComponent } from "../Components/MapMarkers";
 import { styles } from "../styles";
 import { fetchNatureLocations } from "../services/lipasService";
@@ -20,6 +20,15 @@ export default function MapScreen() {
   const [locationsInBounds, setLocationsInBounds] = useState<Location[]>([]);
   const [mapReady, setMapReady] = useState(false);
 
+  // Apufunktio nimen hakemiseen TypeScript-virheiden välttämiseksi
+  const getLocationNameFi = (location: Location) => {
+    if (typeof location.name === "string") return location.name;
+    if (location.name && typeof location.name === "object" && "fi" in location.name) {
+      const val = (location.name as any).fi;
+      if (typeof val === "string") return val;
+    }
+    return "Ei nimeä saatavilla";
+  };
 
   // Get users location:
   useEffect(() => {
@@ -64,7 +73,6 @@ export default function MapScreen() {
 
     fetchLocations();
   }, [userLocation, mapReady]);
-
 
   // Makes sure map is ready before fetching locations
   const handleMapReady = async () => {
@@ -111,6 +119,16 @@ export default function MapScreen() {
 
   // ---------------------------------------------------------------------------------------//
 
+  // Suodatetaan kohteet hakutekstin perusteella
+  const filteredLocations = locationsInBounds.filter((location) => {
+    const coords = getCoordinates(location);
+    if (!coords) return false;
+
+    return getLocationNameFi(location)
+      .toLowerCase()
+      .includes(search.toLowerCase());
+  });
+
   return (
     <View style={styles.container}>
       <SearchBar value={search} onChangeText={setSearch} />
@@ -119,18 +137,16 @@ export default function MapScreen() {
       <MapView
         ref={mapRef}
         style={styles.map}
-        initialRegion={
-          {
-            latitude: 60.1699,
-            longitude: 24.9384,
-            latitudeDelta: 0.1,
-            longitudeDelta: 0.1,
-          }
-        }
+        initialRegion={{
+          latitude: 60.1699,
+          longitude: 24.9384,
+          latitudeDelta: 0.1,
+          longitudeDelta: 0.1,
+        }}
         onMapReady={handleMapReady} // bounding box -search once the map is ready
       >
-        <MarkerComponent locations={locationsInBounds} markerRefs={markerRefs} />
-
+        {/* Use filtered locations based on the SearchBar input */}
+        <MarkerComponent locations={filteredLocations} markerRefs={markerRefs} />
 
         {/* current location  */}
         {userLocation && (
@@ -148,15 +164,15 @@ export default function MapScreen() {
       { }
       <View style={styles.randomButtonContainer}>
         <TouchableOpacity style={styles.randomButton} onPress={handleRandomLocation}>
-          <Ionicons name="shuffle-outline" size={24} color="black" />
+          <Ionicons name="shuffle-outline" size={26} color="#0E1815" />
         </TouchableOpacity>
       </View>
-
-
-      {/* Floating button on the bottom corner for user location */}
-      <TouchableOpacity style={styles.floatingButton} onPress={handleShowMyLocation}>
-        <Text style={styles.floatingButtonText}>📍</Text>
-      </TouchableOpacity>
+      <View style={styles.myLocationButtonContainer}>
+        <TouchableOpacity style={styles.myLocationButton} onPress={handleShowMyLocation}>
+          <Ionicons name="navigate-outline" size={26} color="#0E1815" />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
+

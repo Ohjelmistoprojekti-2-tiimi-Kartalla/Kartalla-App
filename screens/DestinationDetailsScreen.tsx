@@ -1,7 +1,14 @@
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, Image, Button } from 'react-native';
+import { RouteProp, useNavigation } from "@react-navigation/native";
+import type { StackNavigationProp } from '@react-navigation/stack';
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, Dimensions, Modal } from 'react-native';
 import { RouteProp, useNavigation } from "@react-navigation/native";
 import { Location } from "../types/Location";
+import { addToFavorites, removeFromFavorites, getFavoriteLocations } from '../utils/favoritesStorage';
+
+// määritellään reitit
 import { Ionicons } from '@expo/vector-icons';
 import ImageCarousel from '../Components/ImageCarousel';
 import TitleSection from '../Components/TitleSection'; 
@@ -39,6 +46,25 @@ const mockLocation: Location = {
 const screenWidth = Dimensions.get('window').width;
 
 const DestinationDetailsScreen: React.FC<Props> = ({ route }) => {
+  const { location } = route.params;
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  useEffect(() => {
+    getFavoriteLocations().then((favorites) => {
+      setIsFavorite(favorites.some((fav) => fav.sportsPlaceId === location.sportsPlaceId));
+    });
+  }, [location]);
+
+  const toggleFavorite = async () => {
+    if (isFavorite) {
+      await removeFromFavorites(location.sportsPlaceId);
+      setIsFavorite(false);
+    } else {
+      await addToFavorites(location);
+      setIsFavorite(true);
+    }
+  };
   const location = route?.params?.location?.description
     ? route.params.location
     : mockLocation;
@@ -55,6 +81,23 @@ const DestinationDetailsScreen: React.FC<Props> = ({ route }) => {
 
   return (
     <View style={styles.container}>
+      {/* Otsikko ylös */}
+      <Text style={styles.title}>{location.name}</Text>
+
+      {/* Header-kuvat */}
+      <View style={styles.imageRow}>
+        <Image
+          source={require('../assets/maisema.png')}
+          style={styles.headerImage}
+        />
+      </View>
+
+      <Text style={styles.info}>{location.location.address || 'Ei osoitetta'}</Text>
+      {location.properties?.infoFi && <Text style={styles.info}>{location.properties.infoFi}</Text>}
+      <Button
+        title={isFavorite ? 'Poista suosikeista' : 'Lisää suosikkeihin'}
+        onPress={toggleFavorite}
+      />
       <ScrollView showsVerticalScrollIndicator={false}>
         <ImageCarousel
           images={location.images}
@@ -382,6 +425,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     gap: 6,
+  },
+   info: {
+    color: '#fff',
+    fontSize: 16,
+    marginBottom: 8,
+    textAlign: 'center',
   },
 });
 

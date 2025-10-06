@@ -4,6 +4,12 @@ import type { StackNavigationProp } from '@react-navigation/stack';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, Dimensions, Modal, Button } from 'react-native';
 import { Location } from "../types/Location";
 import { addToFavorites, removeFromFavorites, getFavoriteLocations } from '../utils/favoritesStorage';
+import {
+  addToSavedLocations,
+  addToVisitedLocations,
+  removeFromSavedLocations,
+  removeFromVisitedLocations
+} from '../utils/savedVisitedStorage';
 
 // määritellään reitit
 import { Ionicons } from '@expo/vector-icons';
@@ -29,8 +35,8 @@ interface Props {
 
 const mockLocation: Location = {
   id: 1,
-  name: "Mock lokaatio jossakin",
-  description: "Kuvankaunis polku, joka kulkee tiheän mäntymetsän läpi. Reitti polveilee virtaavan joen varrella. Matkan varrella on useita näköalapaikkoja. Huikea reitti :D",
+  name: "Veikeä reitti",
+  description: "Kuvankaunis polku, joka kulkee tiheän mäntymetsän läpi. Reitti polveilee virtaavan joen varrella. Matkan varrella on useita näköalapaikkoja. Huikea reitti!",
   images: [
     require('../assets/luontopolku.png'),
     require('../assets/luontopolku2.jpg'),
@@ -154,8 +160,24 @@ const DestinationDetailsScreen: React.FC<Props> = ({ route }) => {
           <ActionButtons
           isSaved={isSaved}
           isVisited={isVisited}
-          onSave={() => setIsSaved(!isSaved)}
-          onVisit={() => setIsVisited(!isVisited)}
+          onSave={async () => {
+            if (isSaved) {
+              await removeFromSavedLocations(location.id);
+              setIsSaved(false);
+            } else {
+              await addToSavedLocations(location);
+              setIsSaved(true);
+            }
+          }}
+          onVisit={async () => {
+            if (isVisited) {
+              await removeFromVisitedLocations(location.id);
+              setIsVisited(false);
+            } else {
+              await addToVisitedLocations(location);
+              setIsVisited(true);
+            }
+          }}
 />
 
         </View>

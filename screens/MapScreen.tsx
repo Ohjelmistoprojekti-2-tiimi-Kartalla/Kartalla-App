@@ -20,6 +20,7 @@ export default function MapScreen() {
   const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(null);
   const [locationsInBounds, setLocationsInBounds] = useState<Location[]>([]);
   const [mapReady, setMapReady] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(null); // Valittu sijainti modaalia varten
 
   // Apufunktio nimen hakemiseen TypeScript-virheiden välttämiseksi
@@ -134,6 +135,7 @@ export default function MapScreen() {
 
   const handleMarkerPress = (location: Location) => {
     setSelectedLocation(location);
+    setModalVisible(true);
   };
 
   return (
@@ -155,14 +157,6 @@ export default function MapScreen() {
         {/* Use filtered locations based on the SearchBar input */}
         <MarkerComponent locations={filteredLocations} markerRefs={markerRefs} onMarkerPress={handleMarkerPress} />
 
-        {selectedLocation && (
-          <ModalCard
-            visible={!!selectedLocation}
-            onClose={() => setSelectedLocation(null)}
-            location={selectedLocation}
-          />
-        )}
-
         {/* current location  */}
         {userLocation && (
           <Marker
@@ -177,7 +171,16 @@ export default function MapScreen() {
 
       </MapView>
 
-      { }
+    
+
+      {selectedLocation && (
+        <ModalCard
+          visible={modalVisible}
+          onClose={() => setModalVisible(false)}
+          location={selectedLocation}
+        />
+      )}
+
       <View style={styles.randomButtonContainer}>
         <TouchableOpacity style={styles.randomButton} onPress={handleRandomLocation}>
           <Ionicons name="shuffle-outline" size={26} color="#0E1815" />

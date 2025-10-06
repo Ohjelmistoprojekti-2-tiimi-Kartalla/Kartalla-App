@@ -9,6 +9,7 @@ import MapScreen from './screens/MapScreen';
 import DestinationDetailsScreen from './screens/DestinationDetailsScreen';
 import FavouritesScreen from './screens/FavouritesScreen';
 import SettingsScreen from './screens/SettingsScreen';
+import DestinationListScreen from './screens/DestinationListScreen';
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -44,6 +45,9 @@ export default function App() {
         <Drawer.Screen
           name="Suosikit"
           component={FavouritesScreen} />
+          <Drawer.Screen
+          name="Kohteet"
+          component={DestinationListScreen} />
         <Drawer.Screen
           name="Asetukset"
           component={SettingsScreen} />

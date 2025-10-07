@@ -72,4 +72,28 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
   },
+
+  /// ModalCard styles
+  overlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  card: {
+    width: "80%",
+    backgroundColor: "#F3F4F4",
+    borderRadius: 12,
+    padding: 16,
+  },
+  cardImage: { width: "100%", height: 150, borderRadius: 8, marginBottom: 12 },
+  cardTitle: { fontSize: 18, color: "#0E1815", fontWeight: "bold", marginBottom: 6 },
+  cardAddress: { fontSize: 14, color: "#555", marginBottom: 12 },
+  viewButton: {
+    backgroundColor: "#1A2E2C",
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: "center",
+  },
+  viewButtonText: { color: "#F3F4F4", fontWeight: "600" },
 });

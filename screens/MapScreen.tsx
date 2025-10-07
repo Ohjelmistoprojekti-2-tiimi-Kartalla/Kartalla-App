@@ -10,6 +10,7 @@ import * as LocationApi from "expo-location";
 import { getBoundingBoxFromLocation } from "../utils/mapUtils";
 import { getCoordinates } from "../utils/mapUtils";
 import { Ionicons } from "@expo/vector-icons";
+import ModalCard from "../Components/ModalCard";
 import { useNavigation } from "@react-navigation/native";
 
 export default function MapScreen() {
@@ -19,6 +20,8 @@ export default function MapScreen() {
   const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(null);
   const [locationsInBounds, setLocationsInBounds] = useState<Location[]>([]);
   const [mapReady, setMapReady] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedLocation, setSelectedLocation] = useState<Location | null>(null); // Valittu sijainti modaalia varten
 
   // Apufunktio nimen hakemiseen TypeScript-virheiden välttämiseksi
   const getLocationNameFi = (location: Location) => {
@@ -110,6 +113,7 @@ export default function MapScreen() {
       },
       1000
     );
+    setSelectedLocation(location);
 
     // Pieni viive, jotta kartta ehtii liikkua, sitten näytetään callout: eli kohteen nimi
     setTimeout(() => {
@@ -129,6 +133,11 @@ export default function MapScreen() {
       .includes(search.toLowerCase());
   });
 
+  const handleMarkerPress = (location: Location) => {
+    setSelectedLocation(location);
+    setModalVisible(true);
+  };
+
   return (
     <View style={styles.container}>
       <SearchBar value={search} onChangeText={setSearch} />
@@ -146,7 +155,7 @@ export default function MapScreen() {
         onMapReady={handleMapReady} // bounding box -search once the map is ready
       >
         {/* Use filtered locations based on the SearchBar input */}
-        <MarkerComponent locations={filteredLocations} markerRefs={markerRefs} />
+        <MarkerComponent locations={filteredLocations} markerRefs={markerRefs} onMarkerPress={handleMarkerPress} />
 
         {/* current location  */}
         {userLocation && (
@@ -159,9 +168,19 @@ export default function MapScreen() {
             pinColor="blue"
           />
         )}
+
       </MapView>
 
-      { }
+    
+
+      {selectedLocation && (
+        <ModalCard
+          visible={modalVisible}
+          onClose={() => setModalVisible(false)}
+          location={selectedLocation}
+        />
+      )}
+
       <View style={styles.randomButtonContainer}>
         <TouchableOpacity style={styles.randomButton} onPress={handleRandomLocation}>
           <Ionicons name="shuffle-outline" size={26} color="#0E1815" />

@@ -38,7 +38,6 @@ export const MarkerComponent: React.FC<Props> = ({ locations, markerRefs, onMark
                     <Marker
                         ref={ref => { markerRefs.current[location.sportsPlaceId] = ref; }}
                         coordinate={{ latitude: coords.lat, longitude: coords.lon }}
-                        title={location.name || location['name-localized']?.fi || "Ei nimeä saatavilla"}
                         key={location.sportsPlaceId}
                         onPress={() => onMarkerPress(location)} // MapScreen käsittelee modaalin avaamisen
                     />

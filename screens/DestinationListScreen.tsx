@@ -11,6 +11,7 @@ import EmptyState from '../Components/EmptyState';
 type TabType = 'saved' | 'visited';
 
 type RootStackParamList = {
+  Kartalla: { screen?: string; params?: { location: Location } }; 
   DestinationDetails: { location: Location };
   // lisää muut ruudut jos tarvitset
 };
@@ -22,11 +23,16 @@ const DestinationListScreen: React.FC = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   // Lataa tallennetut kohteet
-  const loadSavedLocations = async () => {
+const loadSavedLocations = async () => {
     try {
       const saved = await AsyncStorage.getItem('savedLocations');
       if (saved) {
-        setSaved(JSON.parse(saved));
+        const parsed = JSON.parse(saved);
+        const validLocations = parsed.filter(
+          (loc: Location) => loc && loc.sportsPlaceId && loc.name
+        );
+        setSaved(validLocations);
+        console.log('Loaded saved locations:', validLocations);
       }
     } catch (error) {
       console.error('Error loading saved locations:', error);
@@ -34,11 +40,16 @@ const DestinationListScreen: React.FC = () => {
   };
 
   // Lataa vieraillut kohteet
-  const loadVisitedLocations = async () => {
+ const loadVisitedLocations = async () => {
     try {
       const visited = await AsyncStorage.getItem('visitedLocations');
       if (visited) {
-        setVisited(JSON.parse(visited));
+        const parsed = JSON.parse(visited);
+        const validLocations = parsed.filter(
+          (loc: Location) => loc && loc.sportsPlaceId && loc.name
+        );
+        setVisited(validLocations);
+        console.log('Loaded visited locations:', validLocations);
       }
     } catch (error) {
       console.error('Error loading visited locations:', error);
@@ -70,10 +81,16 @@ const DestinationListScreen: React.FC = () => {
           renderItem={({ item }) => (
             <LocationCard
               item={item}
-              onPress={() => navigation.navigate('DestinationDetails', { location: item })}
+             onPress={() => {
+                console.log('Navigating with location:', item);
+                navigation.navigate('Kartalla', {
+                  screen: 'DestinationDetails',
+                  params: { location: item },
+                });
+              }}
             />
           )}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item) => item.sportsPlaceId.toString()}
           contentContainerStyle={styles.listContainer}
           showsVerticalScrollIndicator={false}
         />

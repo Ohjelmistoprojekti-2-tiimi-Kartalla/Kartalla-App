@@ -75,13 +75,27 @@ const mockLocation: Location = {
 const screenWidth = Dimensions.get('window').width;
 
 const DestinationDetailsScreen: React.FC<Props> = ({ route }) => {
-
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const [isFavorite, setIsFavorite] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [previewVisible, setPreviewVisible] = useState(false);
+  const [previewIndex, setPreviewIndex] = useState(0);
+  const [isSaved, setIsSaved] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
+  const [isVisited, setIsVisited] = useState(false);
 
-  const location = route?.params?.location?.description
-  ? route.params.location
-  : mockLocation;
+  const location = route?.params?.location;
+  if (!location || !location.name || !location.sportsPlaceId) {
+    return (
+      <View style={styles.container}>
+      </View>
+    );
+  }
+
+  
+  const images = Array.isArray(location.images) && location.images.length > 0 
+    ? location.images 
+    : [{ uri: 'https://via.placeholder.com/320' }]; // Varakuva 
 
   useEffect(() => {
     getFavoriteLocations().then((favorites) => {
@@ -98,92 +112,74 @@ const DestinationDetailsScreen: React.FC<Props> = ({ route }) => {
       setIsFavorite(true);
     }
   };
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [previewVisible, setPreviewVisible] = useState(false);
-  const [previewIndex, setPreviewIndex] = useState(0);
-  const [isSaved, setIsSaved] = useState(false);
-  const [isLiked, setIsLiked] = useState(false);
-  const [isVisited, setIsVisited] = useState(false);
-  
 
-  // Mock rating 
-  const rating = 4.7;
+  const rating = 4.7; 
 
   return (
     <View style={styles.container}>
-      {/* Otsikko ylös */}
-      <Text style={styles.title}>{location.name}</Text>
-
-      {/* Header-kuvat */}
-  
       <ScrollView showsVerticalScrollIndicator={false}>
         <ImageCarousel
-          images={location.images}
+          images={images}
           activeIndex={activeIndex}
           setActiveIndex={setActiveIndex}
-          onImagePress={(idx) => { setPreviewIndex(idx); setPreviewVisible(true); }}
+          onImagePress={(idx) => {
+            setPreviewIndex(idx);
+            setPreviewVisible(true);
+          }}
           onBack={() => navigation.goBack()}
           isLiked={isLiked}
           onLike={() => setIsLiked(!isLiked)}
         />
-
         <View style={styles.content}>
 
           {/* Title Section - Paikan nimi ja rating */}
 
           <TitleSection name={location.name} rating={rating} />
 
-
           {/* Meta Infoo paikasta */}
-          <MetaInfo distance="2.3 km" duration="45 min" difficulty="Helppo" />
-
-
+          <MetaInfo
+            distance={location.properties?.routeLengthKm ? `${location.properties.routeLengthKm} km` : 'Ei tiedossa'}
+            duration="45 min" // Korvaa myöhemmin
+            difficulty="Helppo" 
+          />
 
           {/* Description - kuvaus paikasta*/}
-      
-        <Description text={location.description} />
+          <Description text={location.properties?.infoFi || 'Ei kuvausta saatavilla'} />
 
-      
-          {/* Amenities eli "mukavuudet" sektio */}
-
+           {/* Amenities eli "mukavuudet" sektio */}
           <Amenities
             amenities={[
-              { icon: "walk", label: "Luontopolku" },
-              { icon: "eye", label: "Lintujen tarkkailu" },
-              { icon: "?", label: "Tähän jotain" },
-              { icon: "car", label: "Parkkeeraus" }
+              { icon: 'walk', label: 'Luontopolku' },
+              { icon: 'eye', label: 'Lintujen tarkkailu' },
+              { icon: 'car', label: 'Parkkeeraus' },
             ]}
           />
 
-
           {/* Action Buttons / Tallenna - Merkitse vierailluksi*/}
           <ActionButtons
-          isSaved={isSaved}
-          isVisited={isVisited}
-          onSave={async () => {
-            if (isSaved) {
-              await removeFromSavedLocations(location.id);
-              setIsSaved(false);
-            } else {
-              await addToSavedLocations(location);
-              setIsSaved(true);
-            }
-          }}
-          onVisit={async () => {
-            if (isVisited) {
-              await removeFromVisitedLocations(location.id);
-              setIsVisited(false);
-            } else {
-              await addToVisitedLocations(location);
-              setIsVisited(true);
-            }
-          }}
-/>
-
+            isSaved={isSaved}
+            isVisited={isVisited}
+            onSave={async () => {
+              if (isSaved) {
+                await removeFromSavedLocations(location.sportsPlaceId);
+                setIsSaved(false);
+              } else {
+                await addToSavedLocations(location);
+                setIsSaved(true);
+              }
+            }}
+            onVisit={async () => {
+              if (isVisited) {
+                await removeFromVisitedLocations(location.sportsPlaceId);
+                setIsVisited(false);
+              } else {
+                await addToVisitedLocations(location);
+                setIsVisited(true);
+              }
+            }}
+          />
         </View>
       </ScrollView>
-
-      {/* Fullscreen Image Modal - mahdollistaa kuvan suurennuksen */}
       <Modal visible={previewVisible} transparent={true}>
         <View style={styles.modalBackground}>
           <TouchableOpacity
@@ -197,25 +193,28 @@ const DestinationDetailsScreen: React.FC<Props> = ({ route }) => {
             pagingEnabled
             showsHorizontalScrollIndicator={false}
             contentOffset={{ x: previewIndex * screenWidth, y: 0 }}
-            onMomentumScrollEnd={event => {
-              const index = Math.round(
-                event.nativeEvent.contentOffset.x / screenWidth
-              );
+            onMomentumScrollEnd={(event) => {
+              const index = Math.round(event.nativeEvent.contentOffset.x / screenWidth);
               setPreviewIndex(index);
             }}
             style={{ flex: 1 }}
           >
-            {location.images.map((img, idx) => (
+            {images.map((img, idx) => (
               <View
                 key={idx}
-                style={{ width: screenWidth, height: '100%', justifyContent: 'center', alignItems: 'center' }}
+                style={{
+                  width: screenWidth,
+                  height: '100%',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
               >
                 <Image source={img} style={styles.fullscreenImage} />
               </View>
             ))}
           </ScrollView>
           <View style={styles.modalDotsContainer}>
-            {location.images.map((_, idx) => (
+            {images.map((_, idx) => (
               <View
                 key={idx}
                 style={[
@@ -230,6 +229,7 @@ const DestinationDetailsScreen: React.FC<Props> = ({ route }) => {
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {

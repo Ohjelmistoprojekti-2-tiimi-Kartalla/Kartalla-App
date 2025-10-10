@@ -25,19 +25,19 @@ export async function fetchNatureLocations(bounds?: BoundingBox): Promise<Locati
     let pageNumber = 1
     let lastPage = false
     //Loop to fetch all pages of data
-    while (lastPage == false){
-            const response = await fetch(NATURE_LOCATIONS_JSON_URL+pageNumber);
-    if (!response.ok) {
-        console.log(response);
-        throw new Error(`Received status code ${response.status}`);
-    }
-    const minimalData = await response.json(); // this gets only the id:s
-    allMinimalData = allMinimalData.concat(minimalData)
-    if (minimalData.length == 0){
-        lastPage = true
-        break
-    }
-    pageNumber++;
+    while (lastPage == false) {
+        const response = await fetch(NATURE_LOCATIONS_JSON_URL + pageNumber);
+        if (!response.ok) {
+            console.log(response);
+            throw new Error(`Received status code ${response.status}`);
+        }
+        const minimalData = await response.json(); // this gets only the id:s
+        allMinimalData = allMinimalData.concat(minimalData)
+        if (minimalData.length == 0) {
+            lastPage = true
+            break
+        }
+        pageNumber++;
     }
 
 

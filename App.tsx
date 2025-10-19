@@ -45,7 +45,7 @@ export default function App() {
         <Drawer.Screen
           name="Suosikit"
           component={FavouritesScreen} />
-          <Drawer.Screen
+        <Drawer.Screen
           name="Kohteet"
           component={DestinationListScreen} />
         <Drawer.Screen
@@ -55,4 +55,3 @@ export default function App() {
     </NavigationContainer><StatusBar barStyle="light-content" /></> // Asettaa ns. status barin (esim. kellonaika, akku) vaaleaksi
   );
 }
-

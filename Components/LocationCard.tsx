@@ -6,9 +6,10 @@ import { Location } from '../types/Location';
 interface Props {
   item: Location;
   onPress: () => void;
+  onDelete?: () => void;
 }
 
-const LocationCard: React.FC<Props> = ({ item, onPress }) => (
+const LocationCard: React.FC<Props> = ({ item, onPress, onDelete }) => (
   <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.7}>
     <Image
       source={item.images?.[0] || require('../assets/maisema.png')}
@@ -18,7 +19,14 @@ const LocationCard: React.FC<Props> = ({ item, onPress }) => (
       <Text style={styles.name} numberOfLines={1}>{item.name}</Text>
       <Text style={styles.type} numberOfLines={1}>{item.type?.name || 'Nature Reserve'}</Text>
     </View>
-    <Ionicons name="bookmark-outline" size={24} color="#fff" style={styles.icon} />
+    <Ionicons name="bookmark-outline" size={24} color="#fff" style={styles.icon}
+    />
+    {onDelete && (
+      <TouchableOpacity onPress={onDelete} style={styles.icon}>
+        <Ionicons name="trash-outline" size={24} color="#ff6b6b" />
+      </TouchableOpacity>
+    )}
+
   </TouchableOpacity>
 );
 

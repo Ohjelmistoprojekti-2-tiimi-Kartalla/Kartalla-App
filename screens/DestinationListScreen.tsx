@@ -11,7 +11,7 @@ import EmptyState from '../Components/EmptyState';
 type TabType = 'saved' | 'visited';
 
 type RootStackParamList = {
-  Kartalla: { screen?: string; params?: { location: Location } }; 
+  Kartalla: { screen?: string; params?: { location: Location } };
   DestinationDetails: { location: Location };
   // lisää muut ruudut jos tarvitset
 };
@@ -23,7 +23,7 @@ const DestinationListScreen: React.FC = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   // Lataa tallennetut kohteet
-const loadSavedLocations = async () => {
+  const loadSavedLocations = async () => {
     try {
       const saved = await AsyncStorage.getItem('savedLocations');
       if (saved) {
@@ -40,7 +40,7 @@ const loadSavedLocations = async () => {
   };
 
   // Lataa vieraillut kohteet
- const loadVisitedLocations = async () => {
+  const loadVisitedLocations = async () => {
     try {
       const visited = await AsyncStorage.getItem('visitedLocations');
       if (visited) {
@@ -65,9 +65,28 @@ const loadSavedLocations = async () => {
   );
 
   const currentLocations = activeTab === 'saved' ? saved : visited;
-  const emptyMessage = activeTab === 'saved' 
-    ? 'Ei tallennettuja kohteita' 
+  const emptyMessage = activeTab === 'saved'
+    ? 'Ei tallennettuja kohteita'
     : 'Ei vierailtuja kohteita';
+
+
+  //kohteiden poisto
+  const removeLocation = async (id: string) => {
+    try {
+      if (activeTab === 'saved') {
+        const updated = saved.filter(loc => loc.sportsPlaceId.toString() !== id);
+        setSaved(updated);
+        await AsyncStorage.setItem('savedLocations', JSON.stringify(updated));
+      } else {
+        const updated = visited.filter(loc => loc.sportsPlaceId.toString() !== id);
+        setVisited(updated);
+        await AsyncStorage.setItem('visitedLocations', JSON.stringify(updated));
+      }
+    } catch (error) {
+      console.error('Error removing location:', error);
+    }
+  };
+
 
   return (
     <View style={styles.container}>
@@ -81,13 +100,14 @@ const loadSavedLocations = async () => {
           renderItem={({ item }) => (
             <LocationCard
               item={item}
-             onPress={() => {
+              onPress={() => {
                 console.log('Navigating with location:', item);
                 navigation.navigate('Kartalla', {
                   screen: 'DestinationDetails',
                   params: { location: item },
                 });
               }}
+              onDelete={() => removeLocation(item.sportsPlaceId.toString())}
             />
           )}
           keyExtractor={(item) => item.sportsPlaceId.toString()}

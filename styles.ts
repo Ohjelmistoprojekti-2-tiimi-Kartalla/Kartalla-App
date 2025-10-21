@@ -10,6 +10,7 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#1A2E2C',
   },
   map: {
     flex: 1,
@@ -67,10 +68,32 @@ export const styles = StyleSheet.create({
     shadowRadius: 3,
     zIndex: 1,
   },
-  h1: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 10,
+
+  settingsTitle: {
+    fontSize: 18,
+    color: "#F3F4F4",
+    margin: 20,
+  },
+
+  settingsText: {
+    fontSize: 16,
+    color: "#F3F4F4",
+    marginLeft: 20,
+    marginTop: 10,
+    alignSelf: "center",
+  },
+
+  saveButton: {
+    backgroundColor: "#E8E2DA",
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: "center",
+    marginTop: 30,
+    marginHorizontal: 20,
+  },
+  saveButtonText: {
+    color: "#0E1815",
+    fontWeight: "600",
   },
 
   /// ModalCard styles

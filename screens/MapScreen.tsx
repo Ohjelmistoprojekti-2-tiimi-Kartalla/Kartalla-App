@@ -11,12 +11,13 @@ import { getBoundingBoxFromLocation } from "../utils/mapUtils";
 import { getCoordinates } from "../utils/mapUtils";
 import { Ionicons } from "@expo/vector-icons";
 import ModalCard from "../Components/ModalCard";
-import { useNavigation } from "@react-navigation/native";
+import { useSettings } from "../utils/SettingsContext";
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback } from "react";
 
 export default function MapScreen() {
   const mapRef = useRef<MapView>(null);
   const [search, setSearch] = useState("");
-  // const [locations, setLocations] = useState<Location[]>([]);
   const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(null);
   const [locationsInBounds, setLocationsInBounds] = useState<Location[]>([]);
   const [mapReady, setMapReady] = useState(false);
@@ -63,19 +64,27 @@ export default function MapScreen() {
     })();
   }, []);
 
-  useEffect(() => {
-    if (!userLocation || !mapReady) return;
+  const { distance } = useSettings();
 
-    const fetchLocations = async () => {
-      const bounds = getBoundingBoxFromLocation(userLocation.latitude, userLocation.longitude, 100); // 100 km
-      const data = await fetchNatureLocations(bounds);
-      setLocationsInBounds(data);
-      console.log("Bounding box for 100 km:", bounds);
-      console.log("Fetched locations:", data.length);
-    };
+  useFocusEffect(
+    useCallback(() => {
+      if (!userLocation || !mapReady) return;
 
-    fetchLocations();
-  }, [userLocation, mapReady]);
+      const fetchLocations = async () => {
+        const bounds = getBoundingBoxFromLocation(
+          userLocation.latitude,
+          userLocation.longitude,
+          distance
+        );
+        const data = await fetchNatureLocations(bounds);
+        setLocationsInBounds(data);
+        console.log(`Haettiin kohteita ${distance} km säteellä käyttäjän sijainnista`);
+        console.log(`Kohteita löytyi ${data.length} kpl`);
+      };
+
+      fetchLocations();
+    }, [userLocation, mapReady, distance])
+  );
 
   // Makes sure map is ready before fetching locations
   const handleMapReady = async () => {
@@ -144,6 +153,7 @@ export default function MapScreen() {
 
       {/* Fix to be the users location */}
       <MapView
+        key={distance} // re-renders map when distance setting is changed
         ref={mapRef}
         style={styles.map}
         initialRegion={{
@@ -170,8 +180,6 @@ export default function MapScreen() {
         )}
 
       </MapView>
-
-    
 
       {selectedLocation && (
         <ModalCard

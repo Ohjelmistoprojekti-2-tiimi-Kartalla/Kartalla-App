@@ -8,7 +8,7 @@ type SettingsContextType = {
 
 const SettingsContext = createContext<SettingsContextType>({
   distance: 100,
-  setDistance: () => {},
+  setDistance: () => { },
 });
 
 export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {

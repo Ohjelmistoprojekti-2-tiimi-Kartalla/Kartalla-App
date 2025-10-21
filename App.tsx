@@ -37,24 +37,16 @@ function MapStack() {
 
 export default function App() {
   return (
-    <SettingsProvider> {/* Provides settings context globally to the app */}
+    <SettingsProvider>
       <NavigationContainer>
-      <Drawer.Navigator id={undefined} screenOptions={{ headerShown: true, headerStyle: styles.header, headerTintColor: '#F3F4F4' }}>
-        {/* the name in Drawer is "Kartalla" but the component is MapStack */}
-        <Drawer.Screen
-          name="Kartalla"
-          component={MapStack} />
-        <Drawer.Screen
-          name="Suosikit"
-          component={FavouritesScreen} />
-        <Drawer.Screen
-          name="Kohteet"
-          component={DestinationListScreen} />
-        <Drawer.Screen
-          name="Asetukset"
-          component={SettingsScreen} />
-      </Drawer.Navigator>
-    </NavigationContainer><StatusBar barStyle="light-content" /> {/* Sets time and battery icons to light */}
-    </SettingsProvider> 
+        <Drawer.Navigator id={undefined} screenOptions={{ headerShown: true, headerStyle: styles.header, headerTintColor: '#F3F4F4' }}>
+          <Drawer.Screen name="Kartalla" component={MapStack} />
+          <Drawer.Screen name="Suosikit" component={FavouritesScreen} />
+          <Drawer.Screen name="Kohteet" component={DestinationListScreen} />
+          <Drawer.Screen name="Asetukset" component={SettingsScreen} />
+        </Drawer.Navigator>
+      </NavigationContainer>
+      <StatusBar barStyle="light-content" />
+    </SettingsProvider>
   );
 }

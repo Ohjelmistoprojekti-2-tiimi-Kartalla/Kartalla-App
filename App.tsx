@@ -7,7 +7,6 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from "@react-navigation/stack";
 import MapScreen from './screens/MapScreen';
 import DestinationDetailsScreen from './screens/DestinationDetailsScreen';
-import FavouritesScreen from './screens/FavouritesScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import DestinationListScreen from './screens/DestinationListScreen';
 import { SettingsProvider } from "./utils/SettingsContext";
@@ -41,7 +40,6 @@ export default function App() {
       <NavigationContainer>
         <Drawer.Navigator id={undefined} screenOptions={{ headerShown: true, headerStyle: styles.header, headerTintColor: '#F3F4F4' }}>
           <Drawer.Screen name="Kartalla" component={MapStack} />
-          <Drawer.Screen name="Suosikit" component={FavouritesScreen} />
           <Drawer.Screen name="Kohteet" component={DestinationListScreen} />
           <Drawer.Screen name="Asetukset" component={SettingsScreen} />
         </Drawer.Navigator>

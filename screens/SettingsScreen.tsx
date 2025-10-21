@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { styles } from "../styles";
 import Slider from '@react-native-community/slider';
@@ -7,6 +7,7 @@ import { useSettings } from "../utils/SettingsContext";
 export default function SettingsScreen() {
   const { distance, setDistance } = useSettings();
   const [tempValue, setTempValue] = React.useState(distance ?? 100);
+  const [showSavedText, setShowSavedText] = useState(false);
 
   React.useEffect(() => {
     setTempValue(distance);
@@ -15,6 +16,10 @@ export default function SettingsScreen() {
   const handleSave = () => {
     setDistance(tempValue);
     console.log("Asetettu etäisyys: ", tempValue);
+    setShowSavedText(true);
+    setTimeout(() => {
+      setShowSavedText(false);
+    }, 2000);
   }
 
 
@@ -33,9 +38,19 @@ export default function SettingsScreen() {
         maximumTrackTintColor="#BEC8C8"
       />
       <Text style={styles.settingsText}>{tempValue.toFixed(0)} km</Text>
-      <Pressable style={styles.saveButton} onPress={handleSave}>
+      <Pressable style={({ pressed }) => [
+        styles.saveButton,
+        pressed && { opacity: 0.6 }
+      ]} onPress={handleSave}>
         <Text style={styles.saveButtonText}>Tallenna asetukset</Text>
       </Pressable>
+
+      {showSavedText && (
+        <Text style={styles.savedText}>
+          Asetukset tallennettu
+        </Text>
+      )}
+
     </View>
   );
 }

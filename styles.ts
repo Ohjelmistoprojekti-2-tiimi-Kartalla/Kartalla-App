@@ -69,6 +69,21 @@ export const styles = StyleSheet.create({
     zIndex: 1,
   },
 
+  distanceTextContainer: {
+    position: "absolute",
+    bottom: 50,
+    right: 20,
+    zIndex: 1000,
+  },
+
+  distanceText: {
+    fontSize: 16,
+    color: "#0E1815",
+    backgroundColor: "#E8E2DA",
+    padding: 15,
+    borderRadius: 10,
+  },
+
   settingsTitle: {
     fontSize: 18,
     color: "#F3F4F4",
@@ -94,6 +109,12 @@ export const styles = StyleSheet.create({
   saveButtonText: {
     color: "#0E1815",
     fontWeight: "600",
+  },
+
+  savedText: {
+    marginTop: 40,
+    color: "#E8E2DA",
+    alignSelf: "center",
   },
 
   /// ModalCard styles

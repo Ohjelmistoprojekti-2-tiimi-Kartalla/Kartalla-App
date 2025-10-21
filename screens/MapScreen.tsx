@@ -1,5 +1,5 @@
 import SearchBar from "../Components/SearchBar";
-import { View, TouchableOpacity } from "react-native";
+import { View, TouchableOpacity, Text } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import React, { useEffect, useRef, useState } from "react";
 import { MarkerComponent } from "../Components/MapMarkers";
@@ -164,6 +164,10 @@ export default function MapScreen() {
         }}
         onMapReady={handleMapReady} // bounding box -search once the map is ready
       >
+        <View style={styles.distanceTextContainer}>
+          <Text style={styles.distanceText}>Luontokohteet {distance} km säteellä</Text>
+        </View>
+
         {/* Use filtered locations based on the SearchBar input */}
         <MarkerComponent locations={filteredLocations} markerRefs={markerRefs} onMarkerPress={handleMarkerPress} />
 

@@ -18,6 +18,8 @@ export const styles = StyleSheet.create({
   header: {
     backgroundColor: '#0E1815'
   },
+
+  // MapScreen buttons
   randomButtonContainer: {
     position: "absolute",
     top: 70,
@@ -52,6 +54,24 @@ export const styles = StyleSheet.create({
     shadowRadius: 3,
     elevation: 4,
   },
+  filterButtonContainer: {
+    position: "absolute",
+    top: 70,
+    right: 15,
+    alignSelf: "flex-start",
+  },
+  filterButton: {
+    backgroundColor: "#F3F4F4",
+    paddingVertical: 7,
+    paddingHorizontal: 7,
+    borderRadius: 40,
+    shadowColor: "#000000ff",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+    elevation: 4,
+  },
+
   searchBar: {
     position: "absolute",
     top: 20,
@@ -80,7 +100,8 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     color: "#0E1815",
     backgroundColor: "#E8E2DA",
-    padding: 15,
+    padding: 15
+    ,
     borderRadius: 10,
   },
 
@@ -140,4 +161,88 @@ export const styles = StyleSheet.create({
     alignItems: "center",
   },
   viewButtonText: { color: "#F3F4F4", fontWeight: "600" },
+
+  // FilterModal styles
+  filterModalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'flex-end',
+  },
+  filterModalContent: {
+    backgroundColor: '#F3F4F4',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    padding: 24,
+    minHeight: 300,
+  },
+  filterModalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 25,
+    color: '#0E1815',
+  },
+  filterModalSubtitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 12,
+    color: '#2b4c49ff',
+  },
+  filterOptionsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+    marginBottom: 24,
+  },
+  filterOptionButton: {
+    backgroundColor: '#e1e9e9ff',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: 'transparent',
+    flex: 1,
+    minWidth: '45%',
+  },
+  filterOptionButtonActive: {
+    backgroundColor: '#E8E2DA',
+    borderColor: '#1A2E2C',
+  },
+  filterOptionText: {
+    fontSize: 16,
+    color: '#0E1815',
+    fontWeight: '500',
+    textAlign: 'center',
+  },
+  filterOptionTextActive: {
+    color: '#1A2E2C',
+    fontWeight: '700',
+  },
+  filterModalButtonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 12,
+  },
+  filterActionButton: {
+    flex: 1,
+    padding: 16,
+    borderRadius: 12,
+    alignItems: 'center',
+  },
+  filterClearButton: {
+    backgroundColor: '#e1e9e9ff',
+  },
+  filterClearButtonText: {
+    color: '#0E1815',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  filterApplyButton: {
+    backgroundColor: '#1A2E2C',
+  },
+  filterApplyButtonText: {
+    color: '#F3F4F4',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+
 });

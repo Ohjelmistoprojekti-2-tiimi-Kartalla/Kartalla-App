@@ -20,6 +20,7 @@ import {
   animateToUserLocation,
   pickRandomLocation,
 } from "../utils/mapHelpers";
+import FilterModal from "../Components/filterModal";
 
 export default function MapScreen() {
   const mapRef = useRef<MapView>(null);
@@ -29,6 +30,10 @@ export default function MapScreen() {
   const [mapReady, setMapReady] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(null); // Valittu sijainti modaalia varten
+
+  // Filtering
+  const [filterModalVisible, setFilterModalVisible] = useState<boolean>(false);
+  const [activeFilter, setActiveFilter] = useState(null);
 
   const { distance } = useSettings();
   const markerRefs = useRef<{ [key: number]: any | null }>({});
@@ -159,6 +164,21 @@ export default function MapScreen() {
           <Ionicons name="navigate-outline" size={26} color="#0E1815" />
         </TouchableOpacity>
       </View>
+      <View style={styles.filterButtonContainer}>
+        <TouchableOpacity style={styles.filterButton} onPress={() => setFilterModalVisible(true)}>
+          <Ionicons name="options-outline" size={26} color="black" />
+        </TouchableOpacity>
+      </View>
+
+      <FilterModal
+        visible={filterModalVisible}
+        onClose={() => setFilterModalVisible(false)}
+        onApplyFilter={(filter) => {
+          setActiveFilter(filter);
+          // Filtteröintilogiikka tähän
+        }}
+      />
+
     </View>
   );
 }

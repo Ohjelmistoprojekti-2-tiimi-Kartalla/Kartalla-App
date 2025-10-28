@@ -10,6 +10,8 @@ import DestinationDetailsScreen from './screens/DestinationDetailsScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import DestinationListScreen from './screens/DestinationListScreen';
 import { SettingsProvider } from "./utils/SettingsContext";
+import CommentScreen from './screens/CommentScreen';
+
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator<any>();
@@ -30,10 +32,6 @@ function MapStack() {
         component={DestinationDetailsScreen}
         options={{ title: "Kohteen tiedot" }}
       />
-      <Stack.Screen
-        name="SinglePost"
-        component={CommentScreen}
-      />
     </Stack.Navigator>
   );
 }
@@ -46,6 +44,7 @@ export default function App() {
           <Drawer.Screen name="Kartalla" component={MapStack} />
           <Drawer.Screen name="Kohteet" component={DestinationListScreen} />
           <Drawer.Screen name="Asetukset" component={SettingsScreen} />
+          <Drawer.Screen name="Kommentti" component={CommentScreen} />
         </Drawer.Navigator>
       </NavigationContainer>
       <StatusBar barStyle="light-content" />

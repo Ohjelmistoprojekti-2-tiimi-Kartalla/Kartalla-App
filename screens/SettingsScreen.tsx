@@ -1,22 +1,56 @@
-import { useNavigation } from '@react-navigation/native';
-import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { doc, getDoc } from 'firebase/firestore';
-import { RouteProp, useRoute } from '@react-navigation/native';
-import { db } from '../firebaseConfig';
-import { Button, Message } from '../Components/commentHelpers';
-import CommentsModal from '../Components/CommentsModal';
-import { styles } from '../styles';
-import CommentScreen from './CommentScreen';
-
+import React, { useState } from 'react';
+import { View, Text, Pressable } from 'react-native';
+import { styles } from "../styles";
+import Slider from '@react-native-community/slider';
+import { useSettings } from "../utils/SettingsContext";
 
 export default function SettingsScreen() {
+  const { distance, setDistance } = useSettings();
+  const [tempValue, setTempValue] = React.useState(distance ?? 100);
+  const [showSavedText, setShowSavedText] = useState(false);
+
+  React.useEffect(() => {
+    setTempValue(distance);
+  }, [distance]);
+
+  const handleSave = () => {
+    setDistance(tempValue);
+    console.log("Asetettu etäisyys: ", tempValue);
+    setShowSavedText(true);
+    setTimeout(() => {
+      setShowSavedText(false);
+    }, 2000);
+  }
 
 
   return (
     <View style={styles.container}>
-      <Text>Asetukset</Text>
-      <CommentScreen params={"1000"} />
+      <Text style={styles.settingsTitle}>Haettavien kohteiden etäisyys</Text>
+
+      <Slider
+        style={{ width: '90%', height: 40, marginLeft: 20 }}
+        value={tempValue} // sets initial value
+        step={10} // steps are 10 kilometers
+        onValueChange={setTempValue} // updates the value when dragging for text
+        minimumValue={10}
+        maximumValue={500}
+        minimumTrackTintColor="#0E1815"
+        maximumTrackTintColor="#BEC8C8"
+      />
+      <Text style={styles.settingsText}>{tempValue.toFixed(0)} km</Text>
+      <Pressable style={({ pressed }) => [
+        styles.saveButton,
+        pressed && { opacity: 0.6 }
+      ]} onPress={handleSave}>
+        <Text style={styles.saveButtonText}>Tallenna asetukset</Text>
+      </Pressable>
+
+      {showSavedText && (
+        <Text style={styles.savedText}>
+          Asetukset tallennettu
+        </Text>
+      )}
+
     </View>
   );
 }

@@ -10,9 +10,12 @@ import DestinationDetailsScreen from './screens/DestinationDetailsScreen';
 import FavouritesScreen from './screens/FavouritesScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import DestinationListScreen from './screens/DestinationListScreen';
+import SinglePost from './screens/CommentScreen';
+import CommentScreen from './screens/CommentScreen';
+
 
 const Drawer = createDrawerNavigator();
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<any>();
 
 //Nested navigaatio: Drawerin sisällä on Stack ja sen sisällä Screens.
 
@@ -30,6 +33,10 @@ function MapStack() {
         component={DestinationDetailsScreen}
         options={{ title: "Kohteen tiedot" }}
       />
+      <Stack.Screen
+        name="SinglePost"
+        component={CommentScreen}
+      />
     </Stack.Navigator>
   );
 }
@@ -45,12 +52,17 @@ export default function App() {
         <Drawer.Screen
           name="Suosikit"
           component={FavouritesScreen} />
-          <Drawer.Screen
+        <Drawer.Screen
           name="Kohteet"
           component={DestinationListScreen} />
         <Drawer.Screen
           name="Asetukset"
           component={SettingsScreen} />
+        <Drawer.Screen
+          name="kommentti"
+          component={CommentScreen}
+          options={{ title: "kommentti" }}
+        />
       </Drawer.Navigator>
     </NavigationContainer><StatusBar barStyle="light-content" /></> // Asettaa ns. status barin (esim. kellonaika, akku) vaaleaksi
   );

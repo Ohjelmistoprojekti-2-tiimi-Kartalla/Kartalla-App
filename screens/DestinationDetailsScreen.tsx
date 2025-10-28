@@ -14,7 +14,7 @@ import {
 // määritellään reitit
 import { Ionicons } from '@expo/vector-icons';
 import ImageCarousel from '../Components/ImageCarousel';
-import TitleSection from '../Components/TitleSection'; 
+import TitleSection from '../Components/TitleSection';
 import MetaInfo from '../Components/MetaInfo';
 import Amenities from '../Components/Amenities';
 import ActionButtons from '../Components/ActionButtons';
@@ -92,9 +92,9 @@ const DestinationDetailsScreen: React.FC<Props> = ({ route }) => {
     );
   }
 
-  
-  const images = Array.isArray(location.images) && location.images.length > 0 
-    ? location.images 
+
+  const images = Array.isArray(location.images) && location.images.length > 0
+    ? location.images
     : [{ uri: 'https://via.placeholder.com/320' }]; // Varakuva 
 
   useEffect(() => {
@@ -113,7 +113,7 @@ const DestinationDetailsScreen: React.FC<Props> = ({ route }) => {
     }
   };
 
-  const rating = 4.7; 
+  const rating = 4.7;
 
   return (
     <View style={styles.container}>
@@ -140,13 +140,13 @@ const DestinationDetailsScreen: React.FC<Props> = ({ route }) => {
           <MetaInfo
             distance={location.properties?.routeLengthKm ? `${location.properties.routeLengthKm} km` : 'Ei tiedossa'}
             duration="45 min" // Korvaa myöhemmin
-            difficulty="Helppo" 
+            difficulty="Helppo"
           />
 
           {/* Description - kuvaus paikasta*/}
           <Description text={location.properties?.infoFi || 'Ei kuvausta saatavilla'} />
 
-           {/* Amenities eli "mukavuudet" sektio */}
+          {/* Amenities eli "mukavuudet" sektio */}
           <Amenities
             amenities={[
               { icon: 'walk', label: 'Luontopolku' },
@@ -257,12 +257,12 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255,255,255,0.2)',
     justifyContent: 'center',
     alignItems: 'center',
- 
+
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
-    
+
     elevation: 5,
   },
   floatingActions: {
@@ -460,7 +460,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 6,
   },
-   info: {
+  info: {
     color: '#fff',
     fontSize: 16,
     marginBottom: 8,

@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 
 // valkoinen: #F3F4F4
 // tumman vihreä: #0E1815
@@ -96,4 +96,71 @@ export const styles = StyleSheet.create({
     alignItems: "center",
   },
   viewButtonText: { color: "#F3F4F4", fontWeight: "600" },
+  line: {
+    borderWidth: 0.5,
+    borderColor: '#bbbbbb',
+    width: '100%',
+    marginVertical: 20,
+  },
+  commentButtonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  centeredView: {
+    flex: 1,
+    backgroundColor: 'white',
+    padding: 10,
+    marginTop: Platform.OS === 'ios' ? 50 : 20
+  },
+  commentInputContainer: {
+  },
+  textArea: {
+    textAlignVertical: 'top',
+    height: 100
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  details: {
+  },
+  centeredViewComment: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    backgroundColor: 'white',
+    borderRadius: 20,
+    paddingVertical: 20,
+    paddingHorizontal: 10,
+    width: 200,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  label: {
+    fontSize: 16,
+    color: "#333",
+    marginBottom: 5
+  },
+  textInput: {
+    borderWidth: 1,
+    borderColor: "#222",
+    borderRadius: 8,
+    fontSize: 18,
+    paddingLeft: 5,
+    paddingVertical: 5,
+  },
+  CommentComponentContainer: {
+    width: "100%",
+    marginBottom: 20
+  },
 });

@@ -36,11 +36,11 @@ export default function MapScreen() {
   const [filterModalVisible, setFilterModalVisible] = useState<boolean>(false);
   const [activeFilter, setActiveFilter] = useState(null);
 
-  const { distance } = useSettings();
+  const { distance, routeLengthFilter } = useSettings();
   const markerRefs = useRef<{ [key: number]: any | null }>({});
 
 
-  // --------------Käyttäjän sijainti ja haetun säteen näkyvyys --------------------
+  // --------------Käyttäjän sijainti --------------------
   useEffect(() => {
     (async () => {
       const location = await requestUserLocation();
@@ -74,10 +74,10 @@ export default function MapScreen() {
         setShowDistanceText(true);
         const timer = setTimeout(() => {
           setShowDistanceText(false);
-        }, 3000); // 3 sekuntia näkyvissä
+        }, 3000); // Näytä teksti 3 sekuntia
         return () => clearTimeout(timer);
       }
-    }, [userLocation, mapReady, distance])
+    }, [userLocation, mapReady, distance, routeLengthFilter])
   );
 
 
@@ -106,16 +106,38 @@ export default function MapScreen() {
     setTimeout(() => markerRefs.current[location.sportsPlaceId]?.showCallout(), 1000);
   };
 
-  // -------------------- Hakutoiminto --------------------
-  const filteredLocations = locationsInBounds.filter((location) =>
-    getLocationNameFi(location).toLowerCase().includes(search.toLowerCase())
-  );
+  // ---------------- Suodatus haun ja filtteröinnin mukaan -------------------
+  const filteredLocations = locationsInBounds.filter((location) => {
+    // Hae nimen perusteella
+    const searched = getLocationNameFi(location).toLowerCase().includes(search.toLowerCase());
+
+    // Filtteröi reitin pituuden perusteella
+    const routeLength = location.properties?.routeLengthKm || 0;
+
+    const routeLengthMatches =
+      !routeLengthFilter ||
+      (routeLength >= routeLengthFilter.minKm && routeLength <= routeLengthFilter.maxKm);
+
+    return searched && routeLengthMatches;
+  });
 
   // -------------------- Markkerin painallus --------------------
   const handleMarkerPress = (location: Location) => {
     setSelectedLocation(location);
     setModalVisible(true);
   };
+
+  //------ Reitin pituuden ja hakusäteen näyttävän tekstin muodostus -----------
+  const getFilterText = () => {
+    if (!routeLengthFilter) return "";
+    if (routeLengthFilter.id === "under3") return "reitit alle 3 km";
+    if (routeLengthFilter.id === "3to5") return "reitit 3–5 km";
+    if (routeLengthFilter.id === "5to10") return "reitit 5–10 km";
+    if (routeLengthFilter.id === "over10") return "reitit yli 10 km";
+    return "";
+  };
+
+  const disappearingText = `Säde ${distance} km${routeLengthFilter ? `, ${getFilterText()}` : ""}`;
 
   return (
     <View style={styles.container}>
@@ -136,7 +158,7 @@ export default function MapScreen() {
       >
         {showDistanceText && (
           <View style={styles.distanceTextContainer}>
-            <Text style={styles.distanceText}>Säde: {distance} km</Text>
+            <Text style={styles.distanceText}>{disappearingText}</Text>
           </View>
         )}
 
@@ -184,12 +206,7 @@ export default function MapScreen() {
       <FilterModal
         visible={filterModalVisible}
         onClose={() => setFilterModalVisible(false)}
-        onApplyFilter={(filter) => {
-          setActiveFilter(filter);
-          // Filtteröintilogiikka tähän
-        }}
       />
-
     </View>
   );
 }

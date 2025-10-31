@@ -30,6 +30,7 @@ export default function MapScreen() {
   const [mapReady, setMapReady] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(null); // Valittu sijainti modaalia varten
+  const [showDistanceText, setShowDistanceText] = useState(false);
 
   // Filtering
   const [filterModalVisible, setFilterModalVisible] = useState<boolean>(false);
@@ -39,7 +40,7 @@ export default function MapScreen() {
   const markerRefs = useRef<{ [key: number]: any | null }>({});
 
 
-  // --------------Käyttäjän sijainti --------------------
+  // --------------Käyttäjän sijainti ja haetun säteen näkyvyys --------------------
   useEffect(() => {
     (async () => {
       const location = await requestUserLocation();
@@ -68,6 +69,14 @@ export default function MapScreen() {
       };
 
       fetchLocations();
+
+      if (distance) {
+        setShowDistanceText(true);
+        const timer = setTimeout(() => {
+          setShowDistanceText(false);
+        }, 3000); // 3 sekuntia näkyvissä
+        return () => clearTimeout(timer);
+      }
     }, [userLocation, mapReady, distance])
   );
 
@@ -125,9 +134,11 @@ export default function MapScreen() {
         }}
         onMapReady={handleMapReady} // bounding box -search once the map is ready
       >
-        <View style={styles.distanceTextContainer}>
-          <Text style={styles.distanceText}>Luontokohteet {distance} km säteellä</Text>
-        </View>
+        {showDistanceText && (
+          <View style={styles.distanceTextContainer}>
+            <Text style={styles.distanceText}>Säde: {distance} km</Text>
+          </View>
+        )}
 
         {/* Use filtered locations based on the SearchBar input */}
         <MarkerComponent locations={filteredLocations} markerRefs={markerRefs} onMarkerPress={handleMarkerPress} />

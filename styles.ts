@@ -1,4 +1,6 @@
-import { Platform, StyleSheet } from "react-native";
+import { Platform, StyleSheet, Dimensions } from "react-native";
+
+const screenWidth = Dimensions.get('window').width;
 
 // valkoinen: #F3F4F4
 // tumman vihreä: #0E1815
@@ -312,4 +314,460 @@ export const styles = StyleSheet.create({
     width: "100%",
     marginBottom: 20
   },
+
+  //ActionButtons styles
+  buttonRow: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  secondaryButton: {
+    flex: 1,
+    padding: 16,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.2)',
+    backgroundColor: 'transparent',
+    alignItems: 'center',
+  },
+  secondaryButtonText: {
+    color: '#ffffffff',
+    fontSize: 15,
+    fontWeight: '600',
+  },
+  primaryButton: {
+    flex: 1,
+    padding: 16,
+    borderRadius: 16,
+    backgroundColor: '#4caf50',
+    alignItems: 'center',
+  },
+  primaryButtonVisited: {
+    backgroundColor: '#2e7d32',
+  },
+  primaryButtonText: {
+    color: '#fff',
+    fontSize: 15,
+    fontWeight: '600',
+  },
+
+
+  //Amenities styles
+
+  sectionTitle: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 12,
+  },
+  amenitiesGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10,
+    marginBottom: 24,
+  },
+  amenityCard: {
+    width: '48%',
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.1)',
+    borderRadius: 12,
+    padding: 14,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  amenityIcon: {
+    width: 32,
+    height: 32,
+    backgroundColor: 'rgba(76,175,80,0.15)',
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  amenityText: {
+    color: '#ddd',
+    fontSize: 14,
+    fontWeight: '500',
+    flex: 1,
+  },
+
+
+
+  //Description styles
+  description: {
+    color: '#aaa',
+    fontSize: 15,
+    lineHeight: 24,
+    marginBottom: 24,
+  },
+
+
+
+
+  //LocationCard styles
+
+  locationcard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#1a2f26',
+    borderRadius: 16,
+    marginBottom: 12,
+    overflow: 'hidden',
+  },
+  image: {
+    width: 100,
+    height: 100,
+    borderRadius: 12,
+    margin: 8,
+    resizeMode: 'cover',
+  },
+  info: {
+    flex: 1,
+    paddingVertical: 12,
+    paddingLeft: 4,
+  },
+  name: {
+    fontSize: 17,
+    fontWeight: '700',
+    color: '#fff',
+    marginBottom: 4,
+  },
+  type: {
+    fontSize: 14,
+    color: '#6b8b7f',
+  },
+  icon: {
+    padding: 16,
+  },
+
+
+
+  //metaInfo styles
+  metaRow: {
+    flexDirection: 'row',
+    gap: 16,
+    marginBottom: 16,
+  },
+  metaItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  metaText: {
+    color: '#888',
+    fontSize: 14,
+  },
+
+
+  //TabSwitcher styles
+  tabContainer: {
+    flexDirection: 'row',
+    marginHorizontal: 16,
+    marginBottom: 20,
+    backgroundColor: '#1a2f26',
+    borderRadius: 12,
+    padding: 4,
+  },
+  tab: {
+    flex: 1,
+    marginTop: 14,
+    paddingVertical: 12,
+    alignItems: 'center',
+    borderRadius: 8,
+  },
+  activeTab: {
+    backgroundColor: '#2d4a3e',
+  },
+  tabText: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: '#6b8b7f',
+  },
+  activeTabText: {
+    color: '#fff',
+  },
+
+
+  //TitleSection styles
+  titleSection: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 8,
+  },
+  title: {
+    flex: 1,
+    fontSize: 26,
+    fontWeight: '700',
+    color: '#fff',
+    letterSpacing: -0.5,
+    marginRight: 12,
+  },
+  ratingBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: 'rgba(255,193,7,0.15)',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 20,
+  },
+  ratingText: {
+    color: '#ffc107',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+
+
+
+  //DestinationDetails styles
+  destinationDetailContainer: {
+    flex: 1,
+    backgroundColor: '#1a1a1a',
+  },
+  destinationDetailHeroSection: {
+    position: 'relative',
+    height: 320,
+  },
+  destinationDetailHeroImage: {
+    width: screenWidth,
+    height: 320,
+    resizeMode: 'cover',
+  },
+  destinationDetailFloatingBackButton: {
+    position: 'absolute',
+    top: 50,
+    left: 20,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+
+    elevation: 5,
+  },
+  destinationDetailFloatingActions: {
+    position: 'absolute',
+    top: 50,
+    right: 20,
+    flexDirection: 'row',
+    gap: 10,
+  },
+  destinationDetailactionButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  destinationDetaildotsContainer: {
+    position: 'absolute',
+    bottom: 20,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 6,
+  },
+  destinationDetailDot: {
+    height: 6,
+    borderRadius: 3,
+  },
+  destinationDetailActiveDot: {
+    width: 20,
+    backgroundColor: '#fff',
+  },
+  destinationDetailInactiveDot: {
+    width: 6,
+    backgroundColor: 'rgba(255,255,255,0.4)',
+  },
+  destinationDetailContent: {
+    padding: 24,
+  },
+  destinationDetailTitleSection: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 8,
+  },
+  destinationDetailTitle: {
+    flex: 1,
+    fontSize: 26,
+    fontWeight: '700',
+    color: '#fff',
+    letterSpacing: -0.5,
+    marginRight: 12,
+  },
+  destinationDetailRatingBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: 'rgba(255,193,7,0.15)',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 20,
+  },
+  destinationDetailRatingText: {
+    color: '#ffc107',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  destinationDetailMetaRow: {
+    flexDirection: 'row',
+    gap: 16,
+    marginBottom: 16,
+  },
+  destinationDetailMetaItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  destinationDetailMetaText: {
+    color: '#888',
+    fontSize: 14,
+  },
+  destinationDetailDescription: {
+    color: '#aaa',
+    fontSize: 15,
+    lineHeight: 24,
+    marginBottom: 24,
+  },
+  destinationDetailSectionTitle: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 12,
+  },
+  destinationDetailAmenitiesGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10,
+    marginBottom: 24,
+  },
+  destinationDetailAmenityCard: {
+    width: '48%',
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.1)',
+    borderRadius: 12,
+    padding: 14,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  destinationDetailAmenityIcon: {
+    width: 32,
+    height: 32,
+    backgroundColor: 'rgba(76,175,80,0.15)',
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  destinationDetailAmenityText: {
+    color: '#ddd',
+    fontSize: 14,
+    fontWeight: '500',
+    flex: 1,
+  },
+  destinationDetailButtonRow: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  destinationDetailSecondaryButton: {
+    flex: 1,
+    padding: 16,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.2)',
+    backgroundColor: 'transparent',
+    alignItems: 'center',
+  },
+  destinationDetailSecondaryButtonText: {
+    color: '#fff',
+    fontSize: 15,
+    fontWeight: '600',
+  },
+  destinationDetailPrimaryButton: {
+    flex: 1,
+    padding: 16,
+    borderRadius: 16,
+    backgroundColor: '#4caf50',
+    alignItems: 'center',
+  },
+  destinationDetailPrimaryButtonVisited: {
+    backgroundColor: '#2e7d32',
+  },
+  destinationDetailPrimaryButtonText: {
+    color: '#fff',
+    fontSize: 15,
+    fontWeight: '600',
+  },
+  destinationDetailModalBackground: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.95)',
+    justifyContent: 'center',
+  },
+  destinationDetailCloseModalButton: {
+    position: 'absolute',
+    top: 50,
+    right: 20,
+    zIndex: 10,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  destinationDetailFullscreenImage: {
+    width: screenWidth,
+    height: screenWidth,
+    resizeMode: 'contain',
+  },
+  destinationDetailModalDotsContainer: {
+    position: 'absolute',
+    bottom: 100,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 6,
+  },
+  destinationDetailInfo: {
+    color: '#fff',
+    fontSize: 16,
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  destinationDetailImageRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginBottom: 16,
+  },
+  destinationDetailHeaderImage: {
+    width: screenWidth,
+    height: 180,
+    borderRadius: 16,
+    alignSelf: 'center',
+    resizeMode: 'cover',
+    marginBottom: 10,
+  },
+
+
 });

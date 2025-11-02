@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { styles } from '../styles';
 
 interface Props {
   distance: string;
@@ -25,21 +26,5 @@ const MetaInfo: React.FC<Props> = ({ distance, duration, difficulty }) => (
   </View>
 );
 
-const styles = StyleSheet.create({
-  metaRow: {
-    flexDirection: 'row',
-    gap: 16,
-    marginBottom: 16,
-  },
-  metaItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-  },
-  metaText: {
-    color: '#888',
-    fontSize: 14,
-  },
-});
 
 export default MetaInfo;

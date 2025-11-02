@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { RouteProp, useNavigation } from "@react-navigation/native";
 import type { StackNavigationProp } from '@react-navigation/stack';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, Dimensions, Modal, Button } from 'react-native';
+import { View, Text, Image, TouchableOpacity, ScrollView, Dimensions, Modal, Button } from 'react-native';
 import { Location } from "../types/Location";
 import { addToFavorites, removeFromFavorites, getFavoriteLocations } from '../utils/favoritesStorage';
 import {
@@ -10,6 +10,7 @@ import {
   removeFromSavedLocations,
   removeFromVisitedLocations
 } from '../utils/savedVisitedStorage';
+import { styles } from '../styles';
 
 // määritellään reitit
 import { Ionicons } from '@expo/vector-icons';
@@ -87,7 +88,7 @@ const DestinationDetailsScreen: React.FC<Props> = ({ route }) => {
   const location = route?.params?.location;
   if (!location || !location.name || !location.sportsPlaceId) {
     return (
-      <View style={styles.container}>
+      <View style={styles.destinationDetailContainer}>
       </View>
     );
   }
@@ -116,7 +117,7 @@ const DestinationDetailsScreen: React.FC<Props> = ({ route }) => {
   const rating = 4.7;
 
   return (
-    <View style={styles.container}>
+    <View style={styles.destinationDetailContainer}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <ImageCarousel
           images={images}
@@ -130,7 +131,7 @@ const DestinationDetailsScreen: React.FC<Props> = ({ route }) => {
           isLiked={isLiked}
           onLike={() => setIsLiked(!isLiked)}
         />
-        <View style={styles.content}>
+        <View style={styles.destinationDetailContent}>
 
           {/* Title Section - Paikan nimi ja rating */}
 
@@ -181,9 +182,9 @@ const DestinationDetailsScreen: React.FC<Props> = ({ route }) => {
         </View>
       </ScrollView>
       <Modal visible={previewVisible} transparent={true}>
-        <View style={styles.modalBackground}>
+        <View style={styles.destinationDetailModalBackground}>
           <TouchableOpacity
-            style={styles.closeModalButton}
+            style={styles.destinationDetailCloseModalButton}
             onPress={() => setPreviewVisible(false)}
           >
             <Ionicons name="close" size={32} color="#fff" />
@@ -209,17 +210,17 @@ const DestinationDetailsScreen: React.FC<Props> = ({ route }) => {
                   alignItems: 'center',
                 }}
               >
-                <Image source={img} style={styles.fullscreenImage} />
+                <Image source={img} style={styles.destinationDetailFullscreenImage} />
               </View>
             ))}
           </ScrollView>
-          <View style={styles.modalDotsContainer}>
+          <View style={styles.destinationDetailModalDotsContainer}>
             {images.map((_, idx) => (
               <View
                 key={idx}
                 style={[
-                  styles.dot,
-                  previewIndex === idx ? styles.activeDot : styles.inactiveDot,
+                  styles.destinationDetailDot,
+                  previewIndex === idx ? styles.destinationDetailActiveDot : styles.destinationDetailInactiveDot,
                 ]}
               />
             ))}
@@ -231,254 +232,5 @@ const DestinationDetailsScreen: React.FC<Props> = ({ route }) => {
 };
 
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#1a1a1a',
-  },
-  heroSection: {
-    position: 'relative',
-    height: 320,
-  },
-  heroImage: {
-    width: screenWidth,
-    height: 320,
-    resizeMode: 'cover',
-  },
-  floatingBackButton: {
-    position: 'absolute',
-    top: 50,
-    left: 20,
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: 'rgba(255,255,255,0.15)',
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.2)',
-    justifyContent: 'center',
-    alignItems: 'center',
-
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-
-    elevation: 5,
-  },
-  floatingActions: {
-    position: 'absolute',
-    top: 50,
-    right: 20,
-    flexDirection: 'row',
-    gap: 10,
-  },
-  actionButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: 'rgba(255,255,255,0.15)',
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.2)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  dotsContainer: {
-    position: 'absolute',
-    bottom: 20,
-    left: 0,
-    right: 0,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    gap: 6,
-  },
-  dot: {
-    height: 6,
-    borderRadius: 3,
-  },
-  activeDot: {
-    width: 20,
-    backgroundColor: '#fff',
-  },
-  inactiveDot: {
-    width: 6,
-    backgroundColor: 'rgba(255,255,255,0.4)',
-  },
-  content: {
-    padding: 24,
-  },
-  titleSection: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: 8,
-  },
-  title: {
-    flex: 1,
-    fontSize: 26,
-    fontWeight: '700',
-    color: '#fff',
-    letterSpacing: -0.5,
-    marginRight: 12,
-  },
-  ratingBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    backgroundColor: 'rgba(255,193,7,0.15)',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
-  },
-  ratingText: {
-    color: '#ffc107',
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  metaRow: {
-    flexDirection: 'row',
-    gap: 16,
-    marginBottom: 16,
-  },
-  metaItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-  },
-  metaText: {
-    color: '#888',
-    fontSize: 14,
-  },
-  description: {
-    color: '#aaa',
-    fontSize: 15,
-    lineHeight: 24,
-    marginBottom: 24,
-  },
-  sectionTitle: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 12,
-  },
-  amenitiesGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 10,
-    marginBottom: 24,
-  },
-  amenityCard: {
-    width: '48%',
-    backgroundColor: 'rgba(255,255,255,0.05)',
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.1)',
-    borderRadius: 12,
-    padding: 14,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-  },
-  amenityIcon: {
-    width: 32,
-    height: 32,
-    backgroundColor: 'rgba(76,175,80,0.15)',
-    borderRadius: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  amenityText: {
-    color: '#ddd',
-    fontSize: 14,
-    fontWeight: '500',
-    flex: 1,
-  },
-  buttonRow: {
-    flexDirection: 'row',
-    gap: 12,
-  },
-  secondaryButton: {
-    flex: 1,
-    padding: 16,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.2)',
-    backgroundColor: 'transparent',
-    alignItems: 'center',
-  },
-  secondaryButtonText: {
-    color: '#fff',
-    fontSize: 15,
-    fontWeight: '600',
-  },
-  primaryButton: {
-    flex: 1,
-    padding: 16,
-    borderRadius: 16,
-    backgroundColor: '#4caf50',
-    alignItems: 'center',
-  },
-  primaryButtonVisited: {
-    backgroundColor: '#2e7d32',
-  },
-  primaryButtonText: {
-    color: '#fff',
-    fontSize: 15,
-    fontWeight: '600',
-  },
-  modalBackground: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.95)',
-    justifyContent: 'center',
-  },
-  closeModalButton: {
-    position: 'absolute',
-    top: 50,
-    right: 20,
-    zIndex: 10,
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: 'rgba(255,255,255,0.15)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  fullscreenImage: {
-    width: screenWidth,
-    height: screenWidth,
-    resizeMode: 'contain',
-  },
-  modalDotsContainer: {
-    position: 'absolute',
-    bottom: 100,
-    left: 0,
-    right: 0,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    gap: 6,
-  },
-  info: {
-    color: '#fff',
-    fontSize: 16,
-    marginBottom: 8,
-    textAlign: 'center',
-  },
-  imageRow: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginBottom: 16,
-  },
-  headerImage: {
-    width: screenWidth,
-    height: 180,
-    borderRadius: 16,
-    alignSelf: 'center',
-    resizeMode: 'cover',
-    marginBottom: 10,
-  },
-});
 
 export default DestinationDetailsScreen;

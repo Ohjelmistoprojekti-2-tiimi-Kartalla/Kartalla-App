@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View, Button } from 'react-native';
+import { ActivityIndicator, ScrollView, Text, TouchableOpacity, View, Button } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
 import { RouteProp, useRoute } from '@react-navigation/native';

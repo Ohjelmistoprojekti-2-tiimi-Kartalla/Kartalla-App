@@ -156,11 +156,7 @@ export default function MapScreen() {
         }}
         onMapReady={handleMapReady} // bounding box -search once the map is ready
       >
-        {showDistanceText && (
-          <View style={styles.distanceTextContainer}>
-            <Text style={styles.distanceText}>{disappearingText}</Text>
-          </View>
-        )}
+
 
         {/* Use filtered locations based on the SearchBar input */}
         <MarkerComponent locations={filteredLocations} markerRefs={markerRefs} onMarkerPress={handleMarkerPress} />
@@ -178,6 +174,12 @@ export default function MapScreen() {
         )}
 
       </MapView>
+
+      {showDistanceText && (
+        <View style={styles.distanceTextContainer}>
+          <Text style={styles.distanceText}>{disappearingText}</Text>
+        </View>
+      )}
 
       {selectedLocation && (
         <ModalCard

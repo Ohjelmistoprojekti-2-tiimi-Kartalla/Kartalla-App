@@ -43,8 +43,7 @@ const Button = ({ variant = "blue", title, onPress, width = "100%", height = 'au
 const Input = ({ label, ...textInputProps }: TextProps) => {
     return (
         <View style={styles.CommentComponentContainer}>
-            <Text style={styles.label}>{label}</Text>
-            <TextInput {...textInputProps} placeholder={label} style={[styles.textInput, textInputProps.style]} />
+            <TextInput {...textInputProps} placeholder={label} placeholderTextColor={"#fffefeff"} style={[styles.textInput, textInputProps.style]} />
         </View>
     );
 };

@@ -37,7 +37,7 @@ const CommentsModal = ({ modalVisible, setModalVisible, setCommentsTotal, postId
     const [errorDeleteComments, setErrorDeleteComments] = useState<string>('');
 
     const commentsCollection = collection(db, 'comments');
-    //adding comment
+    //adding comment. postId is same as locationId
     const addComment = async () => {
         setLoadingAddComment(true);
         setErrorAddComment('');
@@ -64,6 +64,7 @@ const CommentsModal = ({ modalVisible, setModalVisible, setCommentsTotal, postId
         setErrorGetComments('');
         setSuccessGetComments(false);
         try {
+            {/*use query to find all comments that have same locationId*/ }
             const postDoc = query(commentsCollection, where("post.id", "==", postId));
             const data = await getDocs(postDoc);
             const itemsList: any = [];
@@ -103,8 +104,6 @@ const CommentsModal = ({ modalVisible, setModalVisible, setCommentsTotal, postId
                 }
             },
         ]);
-
-
     };
     //rerenders comments after commenting or deleting
     useEffect(() => {
@@ -121,9 +120,9 @@ const CommentsModal = ({ modalVisible, setModalVisible, setCommentsTotal, postId
         >
             <View style={styles.centeredView}>
                 <View style={styles.commentInputContainer}>
-                    <View style={{ alignItems: "flex-start" }}>
+                    <View style={{ alignItems: "flex-end", paddingRight: 20 }}>
                         <TouchableOpacity
-                            style={styles.destinationDetailCloseModalButton}
+                            style={styles.closeIcon}
                             onPress={() => { setModalVisible(!modalVisible); }}
                         >
                             <Ionicons name="close" size={32} color="#fff" />
@@ -131,19 +130,20 @@ const CommentsModal = ({ modalVisible, setModalVisible, setCommentsTotal, postId
                     </View>
                     {loadingAddComment ? <ActivityIndicator size='large' /> : null}
                     {errorAddComment ? <Message message={errorAddComment} variant='red' /> : null}
-                    <View style={{ paddingTop: 70 }}>
+                    <View style={{ paddingTop: 20 }}>
                         {/*Text box*/}
-                        <Input label=' Kommentoi' value={details} onChangeText={(text) => setDetails(text)} multiline numberOfLines={4} style={styles.textArea} />
-                        <View style={styles.commentButton}>
-                            {/*Comment "Button"*/}
-                            <TouchableOpacity
-                                onPress={() => {
-                                    addComment();
-                                }} disabled={!details || loadingAddComment}
-                            >
+                        <Input label=' Kirjoita kommentti' value={details} onChangeText={(text) => setDetails(text)} multiline numberOfLines={4} style={styles.textArea} />
+                        {/*Comment "Button"*/}
+                        <TouchableOpacity
+                            onPress={() => {
+                                addComment();
+                            }} disabled={!details || loadingAddComment}
+                        >
+                            <View style={styles.commentButton}>
                                 <Text style={styles.commentButtonText}>KOMMENTOI</Text>
-                            </TouchableOpacity>
-                        </View>
+
+                            </View>
+                        </TouchableOpacity>
                     </View>
                 </View>
                 {/*Error messages and loading icon when getting comments*/}
@@ -154,7 +154,7 @@ const CommentsModal = ({ modalVisible, setModalVisible, setCommentsTotal, postId
                     data={comments}
                     renderItem={({ item }) => <Comment item={item} deleteComment={deleteComment} />}
                     keyExtractor={(item) => item.id}
-                    ItemSeparatorComponent={() => <View style={styles.line} />}
+                    ItemSeparatorComponent={() => <View style={{ padding: 10 }} />}
                     ListEmptyComponent={() => <Text style={styles.commentButtonText}>Ole ensinmäinen kommentoija</Text>}
                 />
             </View>

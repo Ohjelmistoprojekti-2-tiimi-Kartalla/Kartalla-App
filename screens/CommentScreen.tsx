@@ -20,8 +20,7 @@ const CommentScreen: React.FC<Props> = ({ params }) => {
 
     // const locationId = "19999" //This is just for testing
     // Makes locationId to String
-    const numberParam = params.toString();
-    const locationId = numberParam;
+    const locationId = params;
 
     const [post, setPost] = useState<PostType>();
     const [loading, setLoading] = useState<boolean>(false);
@@ -69,7 +68,6 @@ const CommentScreen: React.FC<Props> = ({ params }) => {
                         <Text style={{ color: "white", fontSize: 10 }}> ({commentsTotal}) Kommenttia</Text>
                     </TouchableOpacity>
                 </View>
-
             </View>
             <CommentsModal modalVisible={modalVisible} setModalVisible={setModalVisible} setCommentsTotal={setCommentsTotal} postId={locationId} />
         </View>

@@ -268,8 +268,7 @@ export const styles = StyleSheet.create({
   },
   textArea: {
     textAlignVertical: 'top',
-    height: 100,
-    color: "white"
+    height: 100
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -310,6 +309,7 @@ export const styles = StyleSheet.create({
     fontSize: 18,
     paddingLeft: 5,
     paddingVertical: 5,
+    color: "white"
   },
   CommentComponentContainer: {
     width: "100%",
@@ -400,6 +400,8 @@ export const styles = StyleSheet.create({
     fontSize: 15,
     lineHeight: 24,
     marginBottom: 24,
+    marginTop: 5,
+    marginLeft: 5,
   },
 
 
@@ -776,14 +778,21 @@ export const styles = StyleSheet.create({
     borderColor: 'rgba(255,255,255,0.1)',
     borderRadius: 12,
     padding: 14,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
+
+
   },
   commentButtonText: {
     color: '#ddd',
     fontSize: 14,
     fontWeight: '500',
+  },
+  closeIcon: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
 

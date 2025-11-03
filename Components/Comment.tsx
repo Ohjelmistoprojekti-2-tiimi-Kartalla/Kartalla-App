@@ -2,6 +2,7 @@ import { Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import { CommentType } from './CommentsModal';
 import { styles } from '../styles';
+import { Ionicons } from '@expo/vector-icons';
 
 
 
@@ -14,13 +15,13 @@ type Props = {
 //Show Comments on FlatList and delete button
 const Comment = ({ item, deleteComment }: Props) => {
     return (
-        <View style={{ flexDirection: "column", justifyContent: "space-between" }}>
+        <View style={{ flexDirection: "column", borderWidth: 1, borderColor: "white" }}>
             <Text style={styles.description}>{item.details}</Text>
-            <View>
+            <View style={{ alignSelf: "flex-end", padding: 2 }}>
                 {/* icon to delete comment */}
                 <TouchableOpacity
-                    onPress={() => { deleteComment(item?.id, item?.details?.slice(0, 40) + '...'); }}>
-                    <Text style={{ color: "red", fontSize: 10 }}> poista </Text>
+                    onPress={() => { deleteComment(item?.id, item?.details?.slice(0, 50)); }}>
+                    <Ionicons name="trash-outline" size={20} color="#ff6b6b" style={{ padding: 2 }} />
                 </TouchableOpacity>
             </View>
 

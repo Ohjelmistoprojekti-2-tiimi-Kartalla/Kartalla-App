@@ -249,30 +249,32 @@ export const styles = StyleSheet.create({
 
   line: {
     borderWidth: 0.5,
-    borderColor: '#bbbbbb',
+    borderColor: '#F3F4F4',
     width: '100%',
     marginVertical: 20,
   },
   commentButtonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingBottom: 20
   },
   centeredView: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#1a1a1a',
     padding: 10,
-    marginTop: Platform.OS === 'ios' ? 50 : 20
   },
   commentInputContainer: {
   },
   textArea: {
     textAlignVertical: 'top',
-    height: 100
+    height: 100,
+    color: "white"
   },
   buttonContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    color: "#E8E2DA"
   },
   details: {
   },
@@ -283,7 +285,6 @@ export const styles = StyleSheet.create({
     marginTop: 22,
   },
   modalView: {
-    backgroundColor: 'white',
     borderRadius: 20,
     paddingVertical: 20,
     paddingHorizontal: 10,
@@ -299,12 +300,12 @@ export const styles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
-    color: "#333",
+    color: "white",
     marginBottom: 5
   },
   textInput: {
     borderWidth: 1,
-    borderColor: "#222",
+    borderColor: "#fffefeff",
     borderRadius: 8,
     fontSize: 18,
     paddingLeft: 5,
@@ -312,7 +313,7 @@ export const styles = StyleSheet.create({
   },
   CommentComponentContainer: {
     width: "100%",
-    marginBottom: 20
+    marginBottom: 20,
   },
 
   //ActionButtons styles
@@ -767,6 +768,22 @@ export const styles = StyleSheet.create({
     alignSelf: 'center',
     resizeMode: 'cover',
     marginBottom: 10,
+  },
+  commentButton: {
+    width: 120,
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.1)',
+    borderRadius: 12,
+    padding: 14,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  commentButtonText: {
+    color: '#ddd',
+    fontSize: 14,
+    fontWeight: '500',
   },
 
 

@@ -1,4 +1,4 @@
-import { ActivityIndicator, Alert, FlatList, Platform, StyleSheet, Text, View, Button } from 'react-native';
+import { ActivityIndicator, Alert, FlatList, Text, View, TouchableOpacity } from 'react-native';
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Modal } from 'react-native';
 import { addDoc, collection, deleteDoc, doc, getDocs, query, where } from 'firebase/firestore';
@@ -6,6 +6,7 @@ import { db } from '../firebaseConfig';
 import { Input, Message } from './commentHelpers';
 import Comment from './Comment';
 import { styles } from '../styles';
+import { Ionicons } from '@expo/vector-icons';
 
 
 export type CommentType = {
@@ -24,19 +25,19 @@ type Props = {
 
 const CommentsModal = ({ modalVisible, setModalVisible, setCommentsTotal, postId }: Props) => {
     const [details, setDetails] = useState<string>('');
-    const [toggleCommentInput, setToggleCommentInput] = useState<boolean>(false);
     const [loadingAddComment, setLoadingAddComment] = useState<boolean>(false);
     const [successAddComment, setSuccessAddComment] = useState<boolean>(false);
     const [errorAddComment, setErrorAddComment] = useState<string>('');
     const [comments, setComments] = useState<CommentType[]>([]);
+
     const [loadingGetComments, setLoadingGetComments] = useState<boolean>(false);
     const [successGetComments, setSuccessGetComments] = useState<boolean>(false);
     const [errorGetComments, setErrorGetComments] = useState<string>('');
-    const [loadingDeleteComments, setLoadingDeleteComments] = useState<boolean>(false);
     const [successDeleteComments, setSuccessDeleteComments] = useState<boolean>(false);
     const [errorDeleteComments, setErrorDeleteComments] = useState<string>('');
 
     const commentsCollection = collection(db, 'comments');
+    //adding comment
     const addComment = async () => {
         setLoadingAddComment(true);
         setErrorAddComment('');
@@ -57,7 +58,7 @@ const CommentsModal = ({ modalVisible, setModalVisible, setCommentsTotal, postId
         }
         setLoadingAddComment(false);
     };
-
+    //Loading Comments from Firebase storage
     const getComments = async () => {
         setLoadingGetComments(true);
         setErrorGetComments('');
@@ -78,6 +79,8 @@ const CommentsModal = ({ modalVisible, setModalVisible, setCommentsTotal, postId
         }
         setLoadingGetComments(false);
     };
+
+    //Delete comment and confirm deleting
     const deleteComment = async (commentId: string, details: string) => {
         Alert.alert('Delete Comment', details, [
             {
@@ -87,7 +90,6 @@ const CommentsModal = ({ modalVisible, setModalVisible, setCommentsTotal, postId
             },
             {
                 text: 'OK', onPress: async () => {
-                    setLoadingDeleteComments(true);
                     setErrorDeleteComments('');
                     setSuccessDeleteComments(false);
                     try {
@@ -98,13 +100,13 @@ const CommentsModal = ({ modalVisible, setModalVisible, setCommentsTotal, postId
                         setSuccessDeleteComments(false);
                         setErrorDeleteComments(error?.message || "An error occured while deleting comment");
                     }
-                    setLoadingDeleteComments(false);
                 }
             },
         ]);
 
 
     };
+    //rerenders comments after commenting or deleting
     useEffect(() => {
         getComments();
     }, [successAddComment, successDeleteComments]);
@@ -119,36 +121,41 @@ const CommentsModal = ({ modalVisible, setModalVisible, setCommentsTotal, postId
         >
             <View style={styles.centeredView}>
                 <View style={styles.commentInputContainer}>
-                    <View style={{ alignItems: 'flex-end' }}>
-                        <Button
-                            title='Close'
-                            onPress={() => { setModalVisible(!modalVisible); }} />
+                    <View style={{ alignItems: "flex-start" }}>
+                        <TouchableOpacity
+                            style={styles.destinationDetailCloseModalButton}
+                            onPress={() => { setModalVisible(!modalVisible); }}
+                        >
+                            <Ionicons name="close" size={32} color="#fff" />
+                        </TouchableOpacity>
                     </View>
-                    {!toggleCommentInput ? <Button title='comment' onPress={() => setToggleCommentInput(true)} /> : null}
                     {loadingAddComment ? <ActivityIndicator size='large' /> : null}
                     {errorAddComment ? <Message message={errorAddComment} variant='red' /> : null}
-                    {toggleCommentInput ? <View>
-                        <Input label=' Comment' value={details} onChangeText={(text) => setDetails(text)} multiline numberOfLines={4} style={styles.textArea} />
-                        <View style={styles.buttonContainer}>
-                            <Button title='Cancel' onPress={() => {
-                                setToggleCommentInput(false);
-                            }} />
-                            <Button title='Submit' onPress={() => {
-                                setToggleCommentInput(false);
-                                addComment();
-                            }} disabled={!details || loadingAddComment} />
+                    <View style={{ paddingTop: 70 }}>
+                        {/*Text box*/}
+                        <Input label=' Kommentoi' value={details} onChangeText={(text) => setDetails(text)} multiline numberOfLines={4} style={styles.textArea} />
+                        <View style={styles.commentButton}>
+                            {/*Comment "Button"*/}
+                            <TouchableOpacity
+                                onPress={() => {
+                                    addComment();
+                                }} disabled={!details || loadingAddComment}
+                            >
+                                <Text style={styles.commentButtonText}>KOMMENTOI</Text>
+                            </TouchableOpacity>
                         </View>
-                    </View> : null}
+                    </View>
                 </View>
+                {/*Error messages and loading icon when getting comments*/}
                 <View style={styles.line} />
                 {loadingGetComments ? <ActivityIndicator size='large' /> : null}
                 {errorGetComments ? <Message message={errorGetComments} variant='red' /> : null}
                 <FlatList
                     data={comments}
-                    renderItem={({ item }) => <Comment item={item} deleteComment={deleteComment} loadingDeleteComments={loadingDeleteComments} />}
+                    renderItem={({ item }) => <Comment item={item} deleteComment={deleteComment} />}
                     keyExtractor={(item) => item.id}
                     ItemSeparatorComponent={() => <View style={styles.line} />}
-                    ListEmptyComponent={() => <Text>There are no comments available</Text>}
+                    ListEmptyComponent={() => <Text style={styles.commentButtonText}>Ole ensinmäinen kommentoija</Text>}
                 />
             </View>
         </Modal>

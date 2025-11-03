@@ -1,28 +1,29 @@
-import { Text, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import { CommentType } from './CommentsModal';
-import { Button } from './commentHelpers';
+import { styles } from '../styles';
+
 
 
 type Props = {
     item: CommentType;
     deleteComment: (commentId: string, details: string) => void;
-    loadingDeleteComments: boolean;
+
 };
 
-//Kommentin poistaminen
-const Comment = ({ item, deleteComment, loadingDeleteComments }: Props) => {
+//Show Comments on FlatList and delete button
+const Comment = ({ item, deleteComment }: Props) => {
     return (
-        <View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Button
-                    variant='red' title='Remove'
-                    onPress={() => { deleteComment(item?.id, item?.details?.slice(0, 40) + '...'); }}
-                    width={70}
-                    height={25}
-                    paddingVertical={4} />
+        <View style={{ flexDirection: "column", justifyContent: "space-between" }}>
+            <Text style={styles.description}>{item.details}</Text>
+            <View>
+                {/* icon to delete comment */}
+                <TouchableOpacity
+                    onPress={() => { deleteComment(item?.id, item?.details?.slice(0, 40) + '...'); }}>
+                    <Text style={{ color: "red", fontSize: 10 }}> poista </Text>
+                </TouchableOpacity>
             </View>
-            <Text>{item.details}</Text>
+
         </View>
     );
 };

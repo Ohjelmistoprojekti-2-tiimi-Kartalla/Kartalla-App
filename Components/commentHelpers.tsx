@@ -32,21 +32,23 @@ const colors = {
 };
 const Button = ({ variant = "blue", title, onPress, width = "100%", height = 'auto', paddingVertical = 10, disabled = false }: ButtonProps) => {
     return (
-        <TouchableOpacity style={{ backgroundColor: colors[variant], alignItems: 'center', paddingVertical, borderRadius: 8, width: 100, height: 50 }} onPress={onPress} disabled={disabled}>
+        <TouchableOpacity style={{ backgroundColor: colors[variant], alignItems: 'center', paddingVertical, borderRadius: 8, width: 100, height: 50, alignContent: "flex-end" }} onPress={onPress} disabled={disabled}>
             <Text style={{ color: 'white' }}>
                 {title}
             </Text>
         </TouchableOpacity>
     );
 };
+//Text box
 const Input = ({ label, ...textInputProps }: TextProps) => {
     return (
         <View style={styles.CommentComponentContainer}>
             <Text style={styles.label}>{label}</Text>
-            <TextInput {...textInputProps} placeholder={'Enter ' + label} style={[styles.textInput, textInputProps.style]} />
+            <TextInput {...textInputProps} placeholder={label} style={[styles.textInput, textInputProps.style]} />
         </View>
     );
 };
+//Error message
 const Message = ({ variant, message }: MessageProps) => {
     return (
         <View>

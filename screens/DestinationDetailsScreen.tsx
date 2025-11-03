@@ -20,6 +20,7 @@ import MetaInfo from '../Components/MetaInfo';
 import Amenities from '../Components/Amenities';
 import ActionButtons from '../Components/ActionButtons';
 import Description from '../Components/Description';
+import CommentScreen from './CommentScreen';
 
 type RootStackParamList = {
   DestinationDetails: { location: Location };
@@ -155,6 +156,7 @@ const DestinationDetailsScreen: React.FC<Props> = ({ route }) => {
               { icon: 'car', label: 'Parkkeeraus' },
             ]}
           />
+          <CommentScreen params={location.sportsPlaceId} />
 
           {/* Action Buttons / Tallenna - Merkitse vierailluksi*/}
           <ActionButtons

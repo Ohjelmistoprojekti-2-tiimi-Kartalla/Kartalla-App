@@ -1,12 +1,11 @@
-import { useNavigation } from '@react-navigation/native';
-import { ActivityIndicator, ScrollView, Text, TouchableOpacity, View, Button } from 'react-native';
+import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
-import { RouteProp, useRoute } from '@react-navigation/native';
 import { db } from '../firebaseConfig';
 import { Message } from '../Components/commentHelpers';
 import CommentsModal from '../Components/CommentsModal';
 import { styles } from '../styles';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 
 export default function CommentScreen(params) {
@@ -16,9 +15,12 @@ export default function CommentScreen(params) {
         details: string;
         locationId: string;
     };
-    type Props = {};
-    // const locationId = params;
-    const locationId = "19999";
+
+    // const locationId = "19999" //This is just for testing
+    // Makes locationId to String
+    const numberParam: number = params;
+    const locationId = numberParam.toString();
+
     const [post, setPost] = useState<PostType>();
     const [loading, setLoading] = useState<boolean>(false);
     const [success, setSuccess] = useState<boolean>(false);
@@ -49,19 +51,24 @@ export default function CommentScreen(params) {
     }, []);
 
     return (
-        <View style={styles.container}>
+        <View style={{ paddingBottom: 20 }} >
             {loading ? <ActivityIndicator size='large' /> : null}
             {error ? <Message message={error} variant='red' /> : null}
-            {Boolean(post) ? <ScrollView>
-                <Text>{post?.details}</Text>
-                <View style={styles.line} />
-                <View style={styles.commentButtonContainer}>
-                    <Button title={`Comments`} onPress={() => {
-                        setModalVisible(true);
-                    }} />
-                    <Text> ({commentsTotal}) Comments</Text>
+            <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                <View style={styles.amenityCard}>
+                    <View style={styles.amenityIcon}>
+                        <AntDesign name="comment" size={24} color="#4caf50" />
+                    </View>
+                    <TouchableOpacity
+                        onPress={() => {
+                            setModalVisible(true);
+                        }} >
+                        <Text style={styles.amenityText}>Kommentit</Text>
+                        <Text style={{ color: "white", fontSize: 10 }}> ({commentsTotal}) Kommenttia</Text>
+                    </TouchableOpacity>
                 </View>
-            </ScrollView> : null}
+
+            </View>
             <CommentsModal modalVisible={modalVisible} setModalVisible={setModalVisible} setCommentsTotal={setCommentsTotal} postId={locationId} />
         </View>
     );

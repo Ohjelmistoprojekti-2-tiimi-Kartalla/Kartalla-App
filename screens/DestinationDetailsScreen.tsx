@@ -156,7 +156,7 @@ const DestinationDetailsScreen: React.FC<Props> = ({ route }) => {
               { icon: 'car', label: 'Parkkeeraus' },
             ]}
           />
-          <CommentScreen params={location.sportsPlaceId} />
+          <CommentScreen params={location.sportsPlaceId.toString()} />
 
           {/* Action Buttons / Tallenna - Merkitse vierailluksi*/}
           <ActionButtons

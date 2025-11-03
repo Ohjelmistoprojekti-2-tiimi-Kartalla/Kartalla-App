@@ -7,8 +7,10 @@ import CommentsModal from '../Components/CommentsModal';
 import { styles } from '../styles';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
-
-export default function CommentScreen(params) {
+interface Props {
+    params: string;
+}
+const CommentScreen: React.FC<Props> = ({ params }) => {
 
     type PostType = {
         id: string;
@@ -18,8 +20,8 @@ export default function CommentScreen(params) {
 
     // const locationId = "19999" //This is just for testing
     // Makes locationId to String
-    const numberParam: number = params;
-    const locationId = numberParam.toString();
+    const numberParam = params.toString();
+    const locationId = numberParam;
 
     const [post, setPost] = useState<PostType>();
     const [loading, setLoading] = useState<boolean>(false);
@@ -74,3 +76,4 @@ export default function CommentScreen(params) {
     );
 }
 
+export default CommentScreen

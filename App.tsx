@@ -44,7 +44,6 @@ export default function App() {
           <Drawer.Screen name="Kartalla" component={MapStack} />
           <Drawer.Screen name="Kohteet" component={DestinationListScreen} />
           <Drawer.Screen name="Asetukset" component={SettingsScreen} />
-          <Drawer.Screen name="Kommentti" component={CommentScreen} />
         </Drawer.Navigator>
       </NavigationContainer>
       <StatusBar barStyle="light-content" />

@@ -64,3 +64,13 @@ export const removeFromVisitedLocations = async (locationId: number) => {
     console.error('Error removing visited location:', error);
   }
 };
+
+export const getVisitedLocations = async (): Promise<Location[]> => {
+  try {
+    const visited = await AsyncStorage.getItem('visitedLocations');
+    return visited ? JSON.parse(visited) : [];
+  } catch (error) {
+    console.error('Error fetching visited locations:', error);
+    return [];
+  }
+};

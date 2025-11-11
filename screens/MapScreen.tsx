@@ -6,8 +6,7 @@ import { MarkerComponent } from "../Components/MapMarkers";
 import { styles } from "../styles";
 import { fetchNatureLocations } from "../services/lipasService";
 import { Location } from "../types/Location";
-import * as LocationApi from "expo-location";
-import { getBoundingBoxFromLocation } from "../utils/mapUtils";
+import { getBoundingBoxFromLocation } from "../types/BoundingBox";
 import { getCoordinates } from "../utils/mapUtils";
 import { Ionicons } from "@expo/vector-icons";
 import ModalCard from "../Components/ModalCard";
@@ -23,7 +22,7 @@ import {
 import FilterModal from "../Components/filterModal";
 
 export default function MapScreen() {
-  const mapRef = useRef<MapView>(null);
+  const mapRef = useRef<MapView>(null!);
   const [search, setSearch] = useState("");
   const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(null);
   const [locationsInBounds, setLocationsInBounds] = useState<Location[]>([]);
@@ -34,7 +33,6 @@ export default function MapScreen() {
 
   // Filtering
   const [filterModalVisible, setFilterModalVisible] = useState<boolean>(false);
-  const [activeFilter, setActiveFilter] = useState(null);
 
   const { distance, routeLengthFilter } = useSettings();
   const markerRefs = useRef<{ [key: number]: any | null }>({});
@@ -80,9 +78,6 @@ export default function MapScreen() {
     }, [userLocation, mapReady, distance, routeLengthFilter])
   );
 
-
-
-
   // -------------------- Painikkeet --------------------
   const handleShowMyLocation = () => {
     if (userLocation) animateToUserLocation(mapRef, userLocation);
@@ -93,6 +88,8 @@ export default function MapScreen() {
     if (!location) return;
 
     const coords = getCoordinates(location);
+    if (!coords) return;
+
     mapRef.current?.animateToRegion(
       {
         latitude: coords.lat,

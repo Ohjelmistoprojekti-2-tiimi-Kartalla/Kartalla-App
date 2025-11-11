@@ -1,19 +1,4 @@
-// apufunktioita sijaintitietojen käsittelyyn 
-
 import { Location } from "../types/Location";
-
-// palauttaa neliön muotoisen bounding boxin annetun pisteen ympärille
-export function getBoundingBoxFromLocation(lat: number, lon: number, deltaKm = 50) {
-
-  const delta = deltaKm / 111;
-
-  return {
-    north: lat + delta,
-    south: lat - delta,
-    east: lon + delta,
-    west: lon - delta,
-  };
-}
 
 export function getCoordinates(location: Location): { lat: number; lon: number } | null {
   // koordinaatit voivat tulla joko location.coordinates.wgs84 tai location.geometries.features[0] ks. Location.ts

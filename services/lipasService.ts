@@ -1,8 +1,9 @@
 import { Location } from "../types/Location";
+import { BoundingBox } from "../types/BoundingBox";
 import { getCoordinates } from "../utils/mapUtils";
 
 const NATURE_LOCATIONS_JSON_URL = "http://lipas.cc.jyu.fi/api/sports-places?typeCodes=4404&typeCodes=4405&typeCodes=111&pageSize=100&page=";
-// Luotopolku 4044, Retkeilyreitti 4405, Kansallispuisto 111 --> Voidaan lisätä muita samalla tavalla
+// Luotopolku 4044, Retkeilyreitti 4405, Kansallispuisto 111, add others similarly
 
 export async function fetchFullNatureLocation(id: number): Promise<Location> {
     const url = `http://lipas.cc.jyu.fi/api/sports-places/${id}`;
@@ -11,13 +12,6 @@ export async function fetchFullNatureLocation(id: number): Promise<Location> {
         throw new Error(`Status code ${response.status}`);
     }
     return response.json(); // returns the full Location object
-}
-
-export interface BoundingBox {
-    north: number;
-    south: number;
-    east: number;
-    west: number;
 }
 
 export async function fetchNatureLocations(bounds?: BoundingBox): Promise<Location[]> {
@@ -40,8 +34,7 @@ export async function fetchNatureLocations(bounds?: BoundingBox): Promise<Locati
         pageNumber++;
     }
 
-
-    // Fetch each location separately to get location and name, this fetches 100 locations
+    // Fetch each location separately to get location and name
     const data = await Promise.all(
         allMinimalData.map((location: any) => fetchFullNatureLocation(location.sportsPlaceId))
     );
@@ -52,12 +45,8 @@ export async function fetchNatureLocations(bounds?: BoundingBox): Promise<Locati
             const coords = getCoordinates(location);
             if (!coords) return false;
 
-            return (
-                coords.lat <= bounds.north &&
-                coords.lat >= bounds.south &&
-                coords.lon <= bounds.east &&
-                coords.lon >= bounds.west
-            );
+            return bounds.contains(coords.lat, coords.lon);
+            
         });
     }
 

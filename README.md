@@ -34,7 +34,33 @@ and use command
 ```sh
  $ npx expo start --tunnel
 ```
+Get API key Firebase Firestore Database
+"https://firebase.google.com/"
+```sh
+ "Make rules to FireStorage Database
+ service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}"
+"properly configure rules and secure data before deploying app!"
+"add .env file FIREBASE_API_KEY='ENTER YOUR API'"
+```
 
+Android Users get googlemaps API key
+"https://developers.google.com/maps"
+```sh
+"Enamble Maps JavaScript API"
+"add .env file GOOGLEPLATFORM_API_KEY='ENTER YOUR API'"
+```
+For Google places 
+"https://developers.google.com/maps"
+```sh
+"Enamble Places API"
+"add .env file GOOGLEPLATFORM_API_KEY=[ API KEY HERE ]"
+```
 ### Open the app:
 Scan the QR code in your terminal to open the Expo Go app on your phone
 

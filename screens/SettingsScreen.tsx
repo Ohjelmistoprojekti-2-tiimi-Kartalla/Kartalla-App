@@ -7,7 +7,7 @@ import { useSettings } from "../utils/SettingsContext";
 export default function SettingsScreen() {
   const { distance, setDistance } = useSettings();
   const [tempValue, setTempValue] = React.useState(distance ?? 100);
-  const [showSavedText, setShowSavedText] = useState(false);
+  const [showSavedText, setShowSavedText] = useState<boolean>(false);
 
   React.useEffect(() => {
     setTempValue(distance);

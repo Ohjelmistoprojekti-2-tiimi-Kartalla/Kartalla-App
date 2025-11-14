@@ -78,13 +78,13 @@ const screenWidth = Dimensions.get('window').width;
 
 const DestinationDetailsScreen: React.FC<Props> = ({ route }) => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-  const [isFavorite, setIsFavorite] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [previewVisible, setPreviewVisible] = useState(false);
-  const [previewIndex, setPreviewIndex] = useState(0);
-  const [isSaved, setIsSaved] = useState(false);
-  const [isLiked, setIsLiked] = useState(false);
-  const [isVisited, setIsVisited] = useState(false);
+  const [isFavorite, setIsFavorite] = useState<boolean>(false);
+  const [activeIndex, setActiveIndex] = useState<number>(0);
+  const [previewVisible, setPreviewVisible] = useState<boolean>(false);
+  const [previewIndex, setPreviewIndex] = useState<number>(0);
+  const [isSaved, setIsSaved] = useState<boolean>(false);
+  const [isLiked, setIsLiked] = useState<boolean>(false);
+  const [isVisited, setIsVisited] = useState<boolean>(false);
 
   const location = route?.params?.location;
   if (!location || !location.name || !location.sportsPlaceId) {

@@ -13,12 +13,29 @@ Tässä Ohjelmistokehityksen teknologioita -kurssin seminaari tehtävässä kehi
 
 Lähtökohtana on Ohjelmistoprojekti 2 -kurssilla tehty luontokohteita hakeva Kartalla-sovellus, jota on kehitetty 5 hengen tiimissä muutaman kuukauden ajan. Kyseessä on React Nativella kehitetty mobiilisovellus, jossa on jo käytetty TypeScriptiä, mutta sen käyttöä voisi yhdenmukaistaa ja parantaa. 
 
-Lähdin tarkastelemaan projektissa näiden asioiden toteutusta:
-- Propsien ja tilojen tyypittely
+## Toteutus ja opit
+
+To do: Määrittele tyypit komponenteille ja tiloille 
+
+Tarkastelin ja tein korjauksia projektissa:
+- tilojen tyyppien määrittely
+- Propsien tyypin määrittely
+- React.FC:n käyttö funktionaalisissa komponenteissa
 
 Inspiraation lähde tarkastelun kohteille: [Building React Native Apps with TypeScript: Best Practices](https://medium.com/@codenova/building-react-native-apps-with-typescript-best-practices-7c5840d45ed8)
 
-## Toteutus ja opit
+### Tilojen tyyppien määrittely
+
+vaikka TypeScript tulkitsee tilan tyypin alustetusta tilasta, sen voi varmuuden vuoksi määritellä eksplisiittisesti:
+
+esim. 
+
+```
+const [mapReady, setMapReady] = useState(false);
+```
+```
+const [mapReady, setMapReady] = useState<boolean>(false);
+```
 
 ## Jatkokehitysideat
 
@@ -28,3 +45,5 @@ Inspiraation lähde tarkastelun kohteille: [Building React Native Apps with Type
 [Building React Native Apps with TypeScript: Best Practices](https://medium.com/@codenova/building-react-native-apps-with-typescript-best-practices-7c5840d45ed8)
 
 [TypeScript Tutorial for Beginners](https://www.youtube.com/watch?v=d56mG7DezGs)
+
+[TypeScript with React Components](https://react.dev/learn/typescript#typescript-with-react-components)

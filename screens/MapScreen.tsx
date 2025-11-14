@@ -23,13 +23,13 @@ import FilterModal from "../Components/filterModal";
 
 export default function MapScreen() {
   const mapRef = useRef<MapView>(null!);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState<string>("");
   const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(null);
   const [locationsInBounds, setLocationsInBounds] = useState<Location[]>([]);
-  const [mapReady, setMapReady] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [selectedLocation, setSelectedLocation] = useState<Location | null>(null); // Valittu sijainti modaalia varten
-  const [showDistanceText, setShowDistanceText] = useState(false);
+  const [mapReady, setMapReady] = useState<boolean>(false);
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [selectedLocation, setSelectedLocation] = useState<Location | null>(null); // selected location for ModalCard
+  const [showDistanceText, setShowDistanceText] = useState<boolean>(false);
 
   // Filtering
   const [filterModalVisible, setFilterModalVisible] = useState<boolean>(false);

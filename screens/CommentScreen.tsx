@@ -6,22 +6,14 @@ import { Message } from '../Components/commentHelpers';
 import CommentsModal from '../Components/CommentsModal';
 import { styles } from '../styles';
 import AntDesign from '@expo/vector-icons/AntDesign';
-
+import { PostType } from '../types/CommentType';
 interface Props {
     params: string;
 }
+//Get LocationId from DestinationDetalisScreen as params
 const CommentScreen: React.FC<Props> = ({ params }) => {
 
-    type PostType = {
-        id: string;
-        details: string;
-        locationId: string;
-    };
-
-    // const locationId = "19999" //This is just for testing
-    // Makes locationId to String
     const locationId = params;
-
     const [post, setPost] = useState<PostType>();
     const [loading, setLoading] = useState<boolean>(false);
     const [success, setSuccess] = useState<boolean>(false);
@@ -29,8 +21,8 @@ const CommentScreen: React.FC<Props> = ({ params }) => {
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [commentsTotal, setCommentsTotal] = useState<number>(0);
 
-    //Ottaa kohteen locationId:n perusteella kommentit
-    const getPosts = async () => {
+    //Get all comments that maches locationId:n
+    const getComments = async () => {
         setLoading(true);
         setError('');
         setSuccess(false);
@@ -42,24 +34,25 @@ const CommentScreen: React.FC<Props> = ({ params }) => {
             setSuccess(true);
         } catch (error: any) {
             setSuccess(false);
-            setError(error?.message || "An error occured while fetching comment");
+            setError(error?.message || "Kommenttien tuominen ei onnistunut");
         }
         setLoading(false);
     };
     useEffect(() => {
-        getPosts();
-        console.log(params)
+        getComments();
+        console.log("LocationId = " + locationId)
     }, []);
 
     return (
         <View style={{ paddingBottom: 20 }} >
-            {loading ? <ActivityIndicator size='large' /> : null}
+            {/* Error message */}
             {error ? <Message message={error} variant='red' /> : null}
             <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                 <View style={styles.amenityCard}>
                     <View style={styles.amenityIcon}>
                         <AntDesign name="comment" size={24} color="#4caf50" />
                     </View>
+                    {/* Button to open CommentsModal */}
                     <TouchableOpacity
                         onPress={() => {
                             setModalVisible(true);

@@ -20,6 +20,8 @@ import {
   pickRandomLocation,
 } from "../utils/mapHelpers";
 import FilterModal from "../Components/filterModal";
+import { getVisitedLocations } from "../utils/savedVisitedStorage";
+
 
 export default function MapScreen() {
   const mapRef = useRef<MapView>(null!);
@@ -30,7 +32,19 @@ export default function MapScreen() {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(null); // Valittu sijainti modaalia varten
   const [showDistanceText, setShowDistanceText] = useState(false);
+  const [visitedIds, setVisitedIds] = useState<number[]>([]);
 
+  // A state to track visited location and a function to fetch them, this was inside MapMarkers before
+  const fetchVisited = useCallback(async () => {
+    console.log("fetchVisited called");
+    try {
+      const visited = await getVisitedLocations();
+      const ids = visited.map(loc => loc.sportsPlaceId);
+      setVisitedIds(ids);
+    } catch (err) {
+      console.error("Error fetching visited:", err);
+    }
+  }, []);
   // Popup random kohteeseen
   const [randomPopup, setRandomPopup] = useState<{ x: number; y: number; text: string } | null>(null);
 
@@ -79,6 +93,15 @@ export default function MapScreen() {
         return () => clearTimeout(timer);
       }
     }, [userLocation, mapReady, distance, routeLengthFilter])
+  );
+
+  // This will make a visited marker to appear on green when user comes back to MapScreen, previously 
+  // it worked only when the screen was initially rendered when the program started
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchVisited();
+    }, [fetchVisited])
   );
 
   // -------------------- Painikkeet --------------------
@@ -183,7 +206,12 @@ export default function MapScreen() {
 
 
         {/* Use filtered locations based on the SearchBar input */}
-        <MarkerComponent locations={filteredLocations} markerRefs={markerRefs} onMarkerPress={handleMarkerPress} />
+        <MarkerComponent
+          locations={filteredLocations}
+          markerRefs={markerRefs}
+          onMarkerPress={handleMarkerPress}
+          visitedIds={visitedIds}
+        />
 
         {/* current location  */}
         {userLocation && (

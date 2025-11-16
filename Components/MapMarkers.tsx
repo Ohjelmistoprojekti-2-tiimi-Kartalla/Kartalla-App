@@ -1,11 +1,10 @@
-import { Marker, Callout } from "react-native-maps";
+import { Marker } from "react-native-maps";
 import { Location } from "../types/Location";
 import { getCoordinates } from "../utils/mapUtils";
 import { useNavigation } from "@react-navigation/native";
 import type { StackNavigationProp } from '@react-navigation/stack';
-import { getVisitedLocations } from "../utils/savedVisitedStorage";
 import React from "react";
-import { useState, useEffect } from "react";
+
 
 
 //Komponetti saa datan propsina:
@@ -13,13 +12,15 @@ interface Props {
     locations: Location[];
     markerRefs: React.MutableRefObject<{ [key: number]: any | null }>;
     onMarkerPress: (location: Location) => void; // callback modaalin avaamiseen
+    visitedIds: number[];
 }
+
 // Reitin tyypin määrittely navigaatiota varten
 type RootStackParamList = {
     DestinationDetails: { location: Location };
 };
 
-export const MarkerComponent: React.FC<Props> = ({ locations, markerRefs, onMarkerPress }) => {
+export const MarkerComponent: React.FC<Props> = ({ locations, markerRefs, onMarkerPress, visitedIds }) => {
     const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
     // tämän avulla randomkohteeseen hypätessä näytetään kohteen nimi
@@ -30,22 +31,10 @@ export const MarkerComponent: React.FC<Props> = ({ locations, markerRefs, onMark
         }
     };
 
-    // Saves visited
-    const [visitedIds, setVisitedIds] = useState<number[]>([]);
 
-    // Fetch visited when the component is rendered
-    useEffect(() => {
-        const fetchVisited = async () => {
-            try {
-                const visited = await getVisitedLocations();
-                const ids = visited.map((loc) => loc.sportsPlaceId);
-                setVisitedIds(ids);
-            } catch (error) {
-                console.error("Error fetching visited locations:", error);
-            }
-        };
-        fetchVisited();
-    }, []);
+
+
+
 
     console.log("Renderöitäviä markkereita:", locations.length);
     return (
@@ -62,7 +51,7 @@ export const MarkerComponent: React.FC<Props> = ({ locations, markerRefs, onMark
                     <Marker
                         ref={ref => { markerRefs.current[location.sportsPlaceId] = ref; }}
                         coordinate={{ latitude: coords.lat, longitude: coords.lon }}
-                        key={location.sportsPlaceId}
+                        key={`${location.sportsPlaceId}-${visitedIds.includes(location.sportsPlaceId) ? 'v' : 'n'}`} // Added visitedIs to allow to show visited marker on green when coming back to Mapscreen
                         onPress={() => onMarkerPress(location)} // MapScreen käsittelee modaalin avaamisen
                         pinColor={markerColor} // MarkerColor added
                     />

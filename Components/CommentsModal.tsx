@@ -8,7 +8,6 @@ import Comment from './Comment';
 import { styles } from '../styles';
 import { Ionicons } from '@expo/vector-icons';
 
-
 export type CommentType = {
     id: string;
     details: string;
@@ -16,20 +15,20 @@ export type CommentType = {
         id: string;
     };
 };
-type Props = {
+
+type CommentsModalProps = {
     modalVisible: boolean;
     setModalVisible: Dispatch<SetStateAction<boolean>>;
     postId: string;
     setCommentsTotal: Dispatch<SetStateAction<number>>;
 };
 
-const CommentsModal = ({ modalVisible, setModalVisible, setCommentsTotal, postId }: Props) => {
+const CommentsModal = ({ modalVisible, setModalVisible, setCommentsTotal, postId }: CommentsModalProps) => {
     const [details, setDetails] = useState<string>('');
     const [loadingAddComment, setLoadingAddComment] = useState<boolean>(false);
     const [successAddComment, setSuccessAddComment] = useState<boolean>(false);
     const [errorAddComment, setErrorAddComment] = useState<string>('');
     const [comments, setComments] = useState<CommentType[]>([]);
-
     const [loadingGetComments, setLoadingGetComments] = useState<boolean>(false);
     const [successGetComments, setSuccessGetComments] = useState<boolean>(false);
     const [errorGetComments, setErrorGetComments] = useState<string>('');
@@ -85,7 +84,7 @@ const CommentsModal = ({ modalVisible, setModalVisible, setCommentsTotal, postId
     const deleteComment = async (commentId: string, details: string) => {
         Alert.alert('Delete Comment', details, [
             {
-                text: 'Cancel',
+                text: 'Peruuta',
                 onPress: () => { },
                 style: 'cancel',
             },
@@ -161,4 +160,5 @@ const CommentsModal = ({ modalVisible, setModalVisible, setCommentsTotal, postId
         </Modal>
     );
 };
+
 export default CommentsModal;

@@ -2,10 +2,10 @@ import { Platform, StyleSheet, Dimensions } from "react-native";
 
 const screenWidth = Dimensions.get('window').width;
 
-// valkoinen: #F3F4F4
-// tumman vihreä: #0E1815
-// vihreä: #1A2E2C
-// harmaa: #BEC8C8
+// white: #F3F4F4
+// dark green: #0E1815
+// green: #1A2E2C
+// gray: #BEC8C8
 // beige: #E8E2DA
 
 
@@ -19,6 +19,10 @@ export const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: '#0E1815'
+  },
+  listContainer: {
+    paddingHorizontal: 16,
+    paddingBottom: 20,
   },
 
   // MapScreen buttons

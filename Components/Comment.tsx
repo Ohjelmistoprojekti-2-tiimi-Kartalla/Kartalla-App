@@ -4,16 +4,14 @@ import { CommentType } from './CommentsModal';
 import { styles } from '../styles';
 import { Ionicons } from '@expo/vector-icons';
 
-
-
-type Props = {
+type CommentProps = {
     item: CommentType;
     deleteComment: (commentId: string, details: string) => void;
 
 };
 
 //Show Comments on FlatList and delete button
-const Comment = ({ item, deleteComment }: Props) => {
+const Comment = ({ item, deleteComment }: CommentProps) => {
     return (
         <View style={{ flexDirection: "column", borderWidth: 1, borderColor: "white" }}>
             <Text style={styles.description}>{item.details}</Text>
@@ -28,4 +26,5 @@ const Comment = ({ item, deleteComment }: Props) => {
         </View>
     );
 };
+
 export default Comment;

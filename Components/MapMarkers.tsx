@@ -7,26 +7,25 @@ import { getVisitedLocations } from "../utils/savedVisitedStorage";
 import React from "react";
 import { useState, useEffect } from "react";
 
-
-//Komponetti saa datan propsina:
-interface Props {
+//Component receives the data as props
+interface MapMarkersProps {
     locations: Location[];
     markerRefs: React.MutableRefObject<{ [key: number]: any | null }>;
-    onMarkerPress: (location: Location) => void; // callback modaalin avaamiseen
+    onMarkerPress: (location: Location) => void; // callback for opening modal
 }
-// Reitin tyypin määrittely navigaatiota varten
+// Route type definition for navigation
 type RootStackParamList = {
     DestinationDetails: { location: Location };
 };
 
-export const MarkerComponent: React.FC<Props> = ({ locations, markerRefs, onMarkerPress }) => {
+export const MarkerComponent: React.FC<MapMarkersProps> = ({ locations, markerRefs, onMarkerPress }) => {
     const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
-    // tämän avulla randomkohteeseen hypätessä näytetään kohteen nimi
+    // used when jumping to a random location to show the location's name
     const handleMarkerPress = (id: number) => {
         const marker = markerRefs.current[id];
         if (marker) {
-            marker.showCallout(); // näyttää markkerin nimen calloutissa
+            marker.showCallout(); // shows the marker's name in the callout
         }
     };
 
@@ -63,7 +62,7 @@ export const MarkerComponent: React.FC<Props> = ({ locations, markerRefs, onMark
                         ref={ref => { markerRefs.current[location.sportsPlaceId] = ref; }}
                         coordinate={{ latitude: coords.lat, longitude: coords.lon }}
                         key={location.sportsPlaceId}
-                        onPress={() => onMarkerPress(location)} // MapScreen käsittelee modaalin avaamisen
+                        onPress={() => onMarkerPress(location)} // MapScreen handles opening the modal 
                         pinColor={markerColor} // MarkerColor added
                     />
                 );

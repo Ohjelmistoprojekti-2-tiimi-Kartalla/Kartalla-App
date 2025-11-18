@@ -3,12 +3,12 @@ import { View, Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { styles } from '../styles';
 
-interface Props {
+interface TitleSectionProps {
   name: string;
   rating: number;
 }
 
-const TitleSection: React.FC<Props> = ({ name, rating }) => (
+const TitleSection: React.FC<TitleSectionProps> = ({ name, rating }) => (
   <View style={styles.titleSection}>
     <Text style={styles.title} numberOfLines={2}>
       {name}
@@ -19,6 +19,5 @@ const TitleSection: React.FC<Props> = ({ name, rating }) => (
     </View>
   </View>
 );
-
 
 export default TitleSection;

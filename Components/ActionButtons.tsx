@@ -2,14 +2,14 @@ import React from 'react';
 import { View, TouchableOpacity, Text } from 'react-native';
 import { styles } from '../styles';
 
-interface Props {
+interface ButtonProps {
   isSaved: boolean;
   isVisited: boolean;
   onSave: () => void;
   onVisit: () => void;
 }
 
-const ActionButtons: React.FC<Props> = ({ isSaved, isVisited, onSave, onVisit }) => (
+const ActionButtons: React.FC<ButtonProps> = ({ isSaved, isVisited, onSave, onVisit }) => (
   <View style={styles.buttonRow}>
     <TouchableOpacity
       style={styles.secondaryButton}
@@ -32,7 +32,5 @@ const ActionButtons: React.FC<Props> = ({ isSaved, isVisited, onSave, onVisit })
     </TouchableOpacity>
   </View>
 );
-
-
 
 export default ActionButtons;

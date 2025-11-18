@@ -1,10 +1,8 @@
 import * as LocationApi from "expo-location";
 import { Location } from "../types/Location";
 import MapView from "react-native-maps";
-import { getCoordinates } from "./mapUtils";
 
-
-// Apufunktio nimen hakemiseen TypeScript-virheiden välttämiseksi
+// Helper function to get name while avoiding TypeScript errors
 export const getLocationNameFi = (location: Location) => {
     if (typeof location.name === "string") return location.name;
     if (location.name && typeof location.name === "object" && "fi" in location.name) {
@@ -13,7 +11,6 @@ export const getLocationNameFi = (location: Location) => {
     }
     return "Ei nimeä saatavilla";
 };
-
 
 // Get users location:
 export const requestUserLocation = async () => {
@@ -42,7 +39,6 @@ export const animateToUserLocation = (mapRef: React.RefObject<MapView>, coords: 
         1000
     );
 };
-
 
 export const pickRandomLocation = (locations: Location[]) => {
     if (locations.length === 0) return null;

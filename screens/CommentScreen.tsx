@@ -7,10 +7,10 @@ import CommentsModal from '../Components/CommentsModal';
 import { styles } from '../styles';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
-interface Props {
+interface CommentProps {
     params: string;
 }
-const CommentScreen: React.FC<Props> = ({ params }) => {
+const CommentScreen: React.FC<CommentProps> = ({ params }) => {
 
     type PostType = {
         id: string;
@@ -20,6 +20,7 @@ const CommentScreen: React.FC<Props> = ({ params }) => {
 
     // const locationId = "19999" //This is just for testing
     // Makes locationId to String
+
     const locationId = params;
 
     const [post, setPost] = useState<PostType>();
@@ -29,7 +30,7 @@ const CommentScreen: React.FC<Props> = ({ params }) => {
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [commentsTotal, setCommentsTotal] = useState<number>(0);
 
-    //Ottaa kohteen locationId:n perusteella kommentit
+    //gets comments based on locationId
     const getPosts = async () => {
         setLoading(true);
         setError('');

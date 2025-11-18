@@ -4,13 +4,13 @@ import { Ionicons } from '@expo/vector-icons';
 import { Location } from '../types/Location';
 import { styles } from '../styles';
 
-interface Props {
+interface LocationCardProps {
   item: Location;
   onPress: () => void;
   onDelete?: () => void;
 }
 
-const LocationCard: React.FC<Props> = ({ item, onPress, onDelete }) => (
+const LocationCard: React.FC<LocationCardProps> = ({ item, onPress, onDelete }) => (
   <TouchableOpacity style={styles.locationcard} onPress={onPress} activeOpacity={0.7}>
     <Image
       source={item.images?.[0] || require('../assets/maisema.png')}

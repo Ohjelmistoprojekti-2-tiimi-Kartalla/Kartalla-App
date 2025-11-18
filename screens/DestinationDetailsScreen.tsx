@@ -4,15 +4,10 @@ import type { StackNavigationProp } from '@react-navigation/stack';
 import { View, Text, Image, TouchableOpacity, ScrollView, Dimensions, Modal, Button } from 'react-native';
 import { Location } from "../types/Location";
 import { addToFavorites, removeFromFavorites, getFavoriteLocations } from '../utils/favoritesStorage';
-import {
-  addToSavedLocations,
-  addToVisitedLocations,
-  removeFromSavedLocations,
-  removeFromVisitedLocations
-} from '../utils/savedVisitedStorage';
+import {addToSavedLocations, addToVisitedLocations,removeFromSavedLocations, removeFromVisitedLocations} from '../utils/savedVisitedStorage';
 import { styles } from '../styles';
 
-// määritellään reitit
+// Component imports
 import { Ionicons } from '@expo/vector-icons';
 import ImageCarousel from '../Components/ImageCarousel';
 import TitleSection from '../Components/TitleSection';
@@ -26,12 +21,9 @@ type RootStackParamList = {
   DestinationDetails: { location: Location };
 };
 
-type DestinationDetailsRouteProp = RouteProp<
-  RootStackParamList,
-  "DestinationDetails"
->;
+type DestinationDetailsRouteProp = RouteProp<RootStackParamList, "DestinationDetails">;
 
-interface Props {
+interface DestinationDetailsProps {
   route: DestinationDetailsRouteProp;
 }
 
@@ -76,7 +68,7 @@ const mockLocation: Location = {
 
 const screenWidth = Dimensions.get('window').width;
 
-const DestinationDetailsScreen: React.FC<Props> = ({ route }) => {
+const DestinationDetailsScreen: React.FC<DestinationDetailsProps> = ({ route }) => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
   const [activeIndex, setActiveIndex] = useState<number>(0);
@@ -94,10 +86,9 @@ const DestinationDetailsScreen: React.FC<Props> = ({ route }) => {
     );
   }
 
-
   const images = Array.isArray(location.images) && location.images.length > 0
     ? location.images
-    : [{ uri: 'https://via.placeholder.com/320' }]; // Varakuva 
+    : [{ uri: 'https://via.placeholder.com/320' }]; // Placeholder image 
 
   useEffect(() => {
     getFavoriteLocations().then((favorites) => {
@@ -134,21 +125,21 @@ const DestinationDetailsScreen: React.FC<Props> = ({ route }) => {
         />
         <View style={styles.destinationDetailContent}>
 
-          {/* Title Section - Paikan nimi ja rating */}
+          {/* Title Section - Name and rating of the location */}
 
           <TitleSection name={location.name} rating={rating} />
 
-          {/* Meta Infoo paikasta */}
+          {/* Meta Info about the location */}
           <MetaInfo
             distance={location.properties?.routeLengthKm ? `${location.properties.routeLengthKm} km` : 'Ei tiedossa'}
-            duration="45 min" // Korvaa myöhemmin
+            duration="45 min" // Replace later
             difficulty="Helppo"
           />
 
-          {/* Description - kuvaus paikasta*/}
+          {/* Description - Description of the location */}
           <Description text={location.properties?.infoFi || 'Ei kuvausta saatavilla'} />
 
-          {/* Amenities eli "mukavuudet" sektio */}
+          {/* Amenities of the location */}
           <Amenities
             amenities={[
               { icon: 'walk', label: 'Luontopolku' },
@@ -158,7 +149,7 @@ const DestinationDetailsScreen: React.FC<Props> = ({ route }) => {
           />
           <CommentScreen params={location.sportsPlaceId.toString()} />
 
-          {/* Action Buttons / Tallenna - Merkitse vierailluksi*/}
+          {/* Action Buttons / save and mark as visited */}
           <ActionButtons
             isSaved={isSaved}
             isVisited={isVisited}
@@ -232,7 +223,5 @@ const DestinationDetailsScreen: React.FC<Props> = ({ route }) => {
     </View>
   );
 };
-
-
 
 export default DestinationDetailsScreen;

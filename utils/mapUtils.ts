@@ -1,16 +1,17 @@
 import { Location } from "../types/Location";
 
 export function getCoordinates(location: Location): { lat: number; lon: number } | null {
-  // koordinaatit voivat tulla joko location.coordinates.wgs84 tai location.geometries.features[0] ks. Location.ts
+  // coordinates can come either from location.coordinates.wgs84 or location.geometries.features[0], see Location.ts
+  
   const wgs84 = location.location?.coordinates?.wgs84;
   if (wgs84?.lat !== undefined && wgs84?.lon !== undefined) {
     return { lat: wgs84.lat, lon: wgs84.lon };
   }
-  // Jos koordinaatiot ovat geometrioissa, kerrotaan, missä kohtaa ne ovat:
+  // If coordinates are in geometries, specify where they are:
   const firstFeature = location.location?.geometries?.features?.[0];
   if (!firstFeature) return null;
 
-  // jos ovat geometrioisa tarkastetaan kumman tyyppisenä
+  // if they are in geometries, check which type
   if (firstFeature.geometry.type === "Point") {
     const [lon, lat] = firstFeature.geometry.coordinates as number[];
     return { lat, lon };
@@ -19,7 +20,7 @@ export function getCoordinates(location: Location): { lat: number; lon: number }
   if (firstFeature.geometry.type === "LineString") {
     const coords = firstFeature.geometry.coordinates as number[][];
     if (coords.length > 0) {
-      const [lon, lat] = coords[0]; // otetaan linjasta ensimmäinen piste
+      const [lon, lat] = coords[0]; // take the first point from the line
       return { lat, lon };
     }
   }

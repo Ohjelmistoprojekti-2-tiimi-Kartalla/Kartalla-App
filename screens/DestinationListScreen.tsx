@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, FlatList } from 'react-native';
+import { styles } from '../styles';
+import { View, FlatList } from 'react-native';
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { Location } from "../types/Location";
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -13,7 +14,7 @@ type TabType = 'saved' | 'visited';
 type RootStackParamList = {
   Kartalla: { screen?: string; params?: { location: Location } };
   DestinationDetails: { location: Location };
-  // lisää muut ruudut jos tarvitset
+  // Add other screens if needed
 };
 
 const DestinationListScreen: React.FC = () => {
@@ -22,7 +23,7 @@ const DestinationListScreen: React.FC = () => {
   const [visited, setVisited] = useState<Location[]>([]);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
-  // Lataa tallennetut kohteet
+  // Load saved locations
   const loadSavedLocations = async () => {
     try {
       const saved = await AsyncStorage.getItem('savedLocations');
@@ -39,7 +40,7 @@ const DestinationListScreen: React.FC = () => {
     }
   };
 
-  // Lataa vieraillut kohteet
+  // Load visited locations
   const loadVisitedLocations = async () => {
     try {
       const visited = await AsyncStorage.getItem('visitedLocations');
@@ -56,7 +57,7 @@ const DestinationListScreen: React.FC = () => {
     }
   };
 
-  // Lataa data kun näkymä tulee aktiiviseksi
+  // Load locations when screen is focused
   useFocusEffect(
     React.useCallback(() => {
       loadSavedLocations();
@@ -69,8 +70,7 @@ const DestinationListScreen: React.FC = () => {
     ? 'Ei tallennettuja kohteita'
     : 'Ei vierailtuja kohteita';
 
-
-  //kohteiden poisto
+  // Remove location from saved or visited
   const removeLocation = async (id: string) => {
     try {
       if (activeTab === 'saved') {
@@ -86,7 +86,6 @@ const DestinationListScreen: React.FC = () => {
       console.error('Error removing location:', error);
     }
   };
-
 
   return (
     <View style={styles.container}>
@@ -123,16 +122,5 @@ const DestinationListScreen: React.FC = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#1A2E2C',
-  },
-  listContainer: {
-    paddingHorizontal: 16,
-    paddingBottom: 20,
-  },
-});
 
 export default DestinationListScreen;

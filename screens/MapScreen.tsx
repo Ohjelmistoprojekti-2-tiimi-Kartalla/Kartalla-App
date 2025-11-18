@@ -13,19 +13,13 @@ import ModalCard from "../Components/ModalCard";
 import { useSettings } from "../utils/SettingsContext";
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback } from "react";
-import {
-  getLocationNameFi,
-  requestUserLocation,
-  animateToUserLocation,
-  pickRandomLocation,
-} from "../utils/mapHelpers";
+import { getLocationNameFi,requestUserLocation, animateToUserLocation, pickRandomLocation} from "../utils/mapHelpers";
 import FilterModal from "../Components/filterModal";
 import { getVisitedLocations } from "../utils/savedVisitedStorage";
 
-
 export default function MapScreen() {
   const mapRef = useRef<MapView>(null!);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState<string>("");
   const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(null);
   const [locationsInBounds, setLocationsInBounds] = useState<Location[]>([]);
   const [mapReady, setMapReady] = useState(false);
@@ -45,7 +39,7 @@ export default function MapScreen() {
       console.error("Error fetching visited:", err);
     }
   }, []);
-  // Popup random kohteeseen
+  // Popup to random location
   const [randomPopup, setRandomPopup] = useState<{ x: number; y: number; text: string } | null>(null);
 
   // Filtering
@@ -55,7 +49,7 @@ export default function MapScreen() {
   const markerRefs = useRef<{ [key: number]: any | null }>({});
 
 
-  // --------------Käyttäjän sijainti --------------------
+  // --------------User's location --------------------
   useEffect(() => {
     (async () => {
       const location = await requestUserLocation();
@@ -65,7 +59,7 @@ export default function MapScreen() {
     })();
   }, []);
 
-  // -------------------- Kartan lataus ja kohteiden haku --------------------
+  // -------------------- Map loading and fetching locations --------------------
   const handleMapReady = () => setMapReady(true);
 
   useFocusEffect(
@@ -89,7 +83,7 @@ export default function MapScreen() {
         setShowDistanceText(true);
         const timer = setTimeout(() => {
           setShowDistanceText(false);
-        }, 3000); // Näytä teksti 3 sekuntia
+        }, 3000); // Show text for 3 seconds
         return () => clearTimeout(timer);
       }
     }, [userLocation, mapReady, distance, routeLengthFilter])
@@ -104,7 +98,7 @@ export default function MapScreen() {
     }, [fetchVisited])
   );
 
-  // -------------------- Painikkeet --------------------
+  // -------------------- Buttons --------------------
   const handleShowMyLocation = () => {
     if (userLocation) animateToUserLocation(mapRef, userLocation);
   };
@@ -152,13 +146,12 @@ export default function MapScreen() {
     }, 950);
   };
 
-
-  // ---------------- Suodatus haun ja filtteröinnin mukaan -------------------
+  // ---------------- Filtering based on search and filter -------------------
   const filteredLocations = locationsInBounds.filter((location) => {
-    // Hae nimen perusteella
+    // Search by name
     const searched = getLocationNameFi(location).toLowerCase().includes(search.toLowerCase());
 
-    // Filtteröi reitin pituuden perusteella
+    // Filter by route length
     const routeLength = location.properties?.routeLengthKm || 0;
 
     const routeLengthMatches =
@@ -168,13 +161,13 @@ export default function MapScreen() {
     return searched && routeLengthMatches;
   });
 
-  // -------------------- Markkerin painallus --------------------
+  // -------------------- Marker press --------------------
   const handleMarkerPress = (location: Location) => {
     setSelectedLocation(location);
     setModalVisible(true);
   };
 
-  //------ Reitin pituuden ja hakusäteen näyttävän tekstin muodostus -----------
+  //------ Route length and search radius display text formation -----------
   const getFilterText = () => {
     if (!routeLengthFilter) return "";
     if (routeLengthFilter.id === "under3") return "reitit alle 3 km";

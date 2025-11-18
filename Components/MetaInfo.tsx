@@ -3,13 +3,13 @@ import { View, Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { styles } from '../styles';
 
-interface Props {
+interface MetaInfoProps {
   distance: string;
   duration: string;
   difficulty: string;
 }
 
-const MetaInfo: React.FC<Props> = ({ distance, duration, difficulty }) => (
+const MetaInfo: React.FC<MetaInfoProps> = ({ distance, duration, difficulty }) => (
   <View style={styles.metaRow}>
     <View style={styles.metaItem}>
       <Ionicons name="location-outline" size={16} color="#888" />
@@ -25,6 +25,5 @@ const MetaInfo: React.FC<Props> = ({ distance, duration, difficulty }) => (
     </View>
   </View>
 );
-
 
 export default MetaInfo;

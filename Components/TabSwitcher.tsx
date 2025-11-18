@@ -2,12 +2,12 @@ import React from 'react';
 import { View, TouchableOpacity, Text } from 'react-native';
 import { styles } from '../styles';
 
-interface Props {
+interface TabSwitcherProps {
   activeTab: string;
   setActiveTab: (tab: 'saved' | 'visited') => void;
 }
 
-const TabSwitcher: React.FC<Props> = ({ activeTab, setActiveTab }) => (
+const TabSwitcher: React.FC<TabSwitcherProps> = ({ activeTab, setActiveTab }) => (
   <View style={styles.tabContainer}>
     <TouchableOpacity
       style={[styles.tab, activeTab === 'saved' && styles.activeTab]}

@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Location } from '../types/Location';
 
-// Paikan tallennus suosikkeihin
+// Saving location to favorites
 export const addToFavorites = async (location: Location): Promise<void> => {
   try {
     const favorites = await getFavoriteLocations();
@@ -16,7 +16,7 @@ export const addToFavorites = async (location: Location): Promise<void> => {
   }
 };
 
-// Paikan poistaminen suosikeista
+// Removing location from favorites
 export const removeFromFavorites = async (sportsPlaceId: number): Promise<void> => {
   try {
     const favorites = await getFavoriteLocations();
@@ -28,7 +28,7 @@ export const removeFromFavorites = async (sportsPlaceId: number): Promise<void> 
   }
 };
 
-// Suosikkien fetchaus
+// Fetching favorite locations
 export const getFavoriteLocations = async (): Promise<Location[]> => {
   try {
     const favoritesJson = await AsyncStorage.getItem('favorites');

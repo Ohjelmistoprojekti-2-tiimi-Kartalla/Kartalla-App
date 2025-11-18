@@ -5,15 +5,15 @@ import { getVisitedLocations } from "../utils/savedVisitedStorage";
 import React from "react";
 import { useState, useEffect } from "react";
 
-//Komponetti saa datan propsina:
-interface Props {
+//Component receives the data as props
+interface MapMarkersProps {
     locations: Location[];
     markerRefs: React.MutableRefObject<{ [key: number]: any | null }>;
-    onMarkerPress: (location: Location) => void; // callback modaalin avaamiseen
+    onMarkerPress: (location: Location) => void; // callback for opening modal
     visitedIds: number[];
 }
 
-export const MarkerComponent: React.FC<Props> = ({ locations, markerRefs, onMarkerPress }) => {
+export const MarkerComponent: React.FC<MapMarkersProps> = ({ locations, markerRefs, onMarkerPress }) => {
 
     // Saves visited
     const [visitedIds, setVisitedIds] = useState<number[]>([]);
@@ -48,7 +48,7 @@ export const MarkerComponent: React.FC<Props> = ({ locations, markerRefs, onMark
                         ref={ref => { markerRefs.current[location.sportsPlaceId] = ref; }}
                         coordinate={{ latitude: coords.lat, longitude: coords.lon }}
                         key={`${location.sportsPlaceId}-${visitedIds.includes(location.sportsPlaceId) ? 'v' : 'n'}`} // Added visitedIs to allow to show visited marker on green when coming back to Mapscreen
-                        onPress={() => onMarkerPress(location)} // MapScreen käsittelee modaalin avaamisen
+                        onPress={() => onMarkerPress(location)} // MapScreen handles opening the modal 
                         pinColor={markerColor} // MarkerColor added
                     />
                 );

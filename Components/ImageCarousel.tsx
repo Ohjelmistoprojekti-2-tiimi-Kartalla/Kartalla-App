@@ -2,8 +2,7 @@ import React from 'react';
 import { View, ScrollView, Image, TouchableOpacity } from 'react-native';
 import { Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-
-interface Props {
+interface ImagesProps {
   images: any[];
   activeIndex: number;
   setActiveIndex: (idx: number) => void;
@@ -11,10 +10,9 @@ interface Props {
   onBack: () => void;
   isLiked: boolean;
   onLike: () => void;
-  
 }
 
-const ImageCarousel: React.FC<Props> = ({
+const ImageCarousel: React.FC<ImagesProps> = ({
   images, activeIndex, setActiveIndex, onImagePress, onBack, isLiked, onLike
 }) => (
   <View style={{ position: 'relative', height: 320 }}>

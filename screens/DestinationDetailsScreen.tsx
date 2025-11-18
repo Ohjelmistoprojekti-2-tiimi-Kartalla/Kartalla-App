@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { RouteProp, useNavigation } from "@react-navigation/native";
 import type { StackNavigationProp } from '@react-navigation/stack';
-import { View, Text, Image, TouchableOpacity, ScrollView, Dimensions, Modal, Button } from 'react-native';
+import { View, Image, TouchableOpacity, ScrollView, Dimensions, Modal } from 'react-native';
 import { Location } from "../types/Location";
-import { addToFavorites, removeFromFavorites, getFavoriteLocations } from '../utils/favoritesStorage';
+import { getFavoriteLocations } from '../utils/favoritesStorage';
 import {
   addToSavedLocations,
   addToVisitedLocations,
@@ -35,45 +35,6 @@ interface Props {
   route: DestinationDetailsRouteProp;
 }
 
-const mockLocation: Location = {
-  id: 1,
-  name: "Veikeä reitti",
-  description: "Kuvankaunis polku, joka kulkee tiheän mäntymetsän läpi. Reitti polveilee virtaavan joen varrella. Matkan varrella on useita näköalapaikkoja. Huikea reitti!",
-  images: [
-    require('../assets/luontopolku.png'),
-    require('../assets/luontopolku2.jpg'),
-    require('../assets/maisema.png')
-  ],
-  sportsPlaceId: 123,
-  type: {
-    typeCode: 1,
-    name: "Luontopolku"
-  },
-  location: {
-    address: "Luontopolku 23, 56700 Padasjoki",
-    city: {
-      name: "Padasjoki",
-      postalCode: "56700",
-      postalOffice: "Padasjoki"
-    },
-    coordinates: {
-      wgs84: {
-        lat: 60.1699,
-        lon: 24.9384
-      }
-    },
-    geometries: {
-      type: "FeatureCollection",
-      features: []
-    }
-  },
-  properties: {
-    infoFi: "Lisätietoa reitistä",
-    routeLengthKm: 2.3,
-    www: "https://esimerkki.fi"
-  }
-};
-
 const screenWidth = Dimensions.get('window').width;
 
 const DestinationDetailsScreen: React.FC<Props> = ({ route }) => {
@@ -94,7 +55,6 @@ const DestinationDetailsScreen: React.FC<Props> = ({ route }) => {
     );
   }
 
-
   const images = Array.isArray(location.images) && location.images.length > 0
     ? location.images
     : [{ uri: 'https://via.placeholder.com/320' }]; // Varakuva 
@@ -104,16 +64,6 @@ const DestinationDetailsScreen: React.FC<Props> = ({ route }) => {
       setIsFavorite(favorites.some((fav) => fav.sportsPlaceId === location.sportsPlaceId));
     });
   }, [location]);
-
-  const toggleFavorite = async () => {
-    if (isFavorite) {
-      await removeFromFavorites(location.sportsPlaceId);
-      setIsFavorite(false);
-    } else {
-      await addToFavorites(location);
-      setIsFavorite(true);
-    }
-  };
 
   const rating = 4.7;
 

@@ -1,8 +1,6 @@
 import * as LocationApi from "expo-location";
 import { Location } from "../types/Location";
 import MapView from "react-native-maps";
-import { getCoordinates } from "./mapUtils";
-
 
 // Apufunktio nimen hakemiseen TypeScript-virheiden välttämiseksi
 export const getLocationNameFi = (location: Location) => {

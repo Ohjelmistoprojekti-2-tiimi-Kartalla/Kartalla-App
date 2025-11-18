@@ -1,12 +1,11 @@
-import { Marker, Callout } from "react-native-maps";
+import { Marker } from "react-native-maps";
 import { Location } from "../types/Location";
 import { getCoordinates } from "../utils/mapUtils";
-import { useNavigation } from "@react-navigation/native";
-import type { StackNavigationProp } from '@react-navigation/stack';
+// import { useNavigation } from "@react-navigation/native";
+// import type { StackNavigationProp } from '@react-navigation/stack';
 import { getVisitedLocations } from "../utils/savedVisitedStorage";
 import React from "react";
 import { useState, useEffect } from "react";
-
 
 //Komponetti saa datan propsina:
 interface Props {
@@ -14,21 +13,8 @@ interface Props {
     markerRefs: React.MutableRefObject<{ [key: number]: any | null }>;
     onMarkerPress: (location: Location) => void; // callback modaalin avaamiseen
 }
-// Reitin tyypin määrittely navigaatiota varten
-type RootStackParamList = {
-    DestinationDetails: { location: Location };
-};
 
 export const MarkerComponent: React.FC<Props> = ({ locations, markerRefs, onMarkerPress }) => {
-    const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-
-    // tämän avulla randomkohteeseen hypätessä näytetään kohteen nimi
-    const handleMarkerPress = (id: number) => {
-        const marker = markerRefs.current[id];
-        if (marker) {
-            marker.showCallout(); // näyttää markkerin nimen calloutissa
-        }
-    };
 
     // Saves visited
     const [visitedIds, setVisitedIds] = useState<number[]>([]);

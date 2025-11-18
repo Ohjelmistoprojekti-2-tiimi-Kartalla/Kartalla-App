@@ -22,7 +22,7 @@ const CommentScreen: React.FC<Props> = ({ params }) => {
     // Makes locationId to String
     const locationId = params;
 
-    const [post, setPost] = useState<PostType>();
+    const [post, setPost] = useState<PostType | undefined>(undefined);
     const [loading, setLoading] = useState<boolean>(false);
     const [success, setSuccess] = useState<boolean>(false);
     const [error, setError] = useState<string>('');

@@ -1,18 +1,7 @@
-// components/Button.tsx
 
-import { StyleSheet, Text, TextInput, TextInputProps, TouchableOpacity, View } from 'react-native';
+import { Text, TextInput, TextInputProps, View } from 'react-native';
 import React from 'react';
 import { styles } from '../styles';
-
-type ButtonProps = {
-    variant?: 'green' | 'blue' | 'red' | 'gray' | 'info' | 'dark-red';
-    title: string;
-    onPress: () => void;
-    width?: string | number;
-    height?: string | number;
-    paddingVertical?: number,
-    disabled?: boolean;
-};
 
 type TextProps = TextInputProps & {
     label: string;
@@ -26,28 +15,23 @@ const colors = {
     blue: '#007bff',
     green: "#28a745",
     red: "#dc3545",
-    gray: '#6c757d',
-    info: "#17a2b8",
-    'dark-red': '#8b0000'
 };
-const Button = ({ variant = "blue", title, onPress, width = "100%", height = 'auto', paddingVertical = 10, disabled = false }: ButtonProps) => {
-    return (
-        <TouchableOpacity style={{ backgroundColor: colors[variant], alignItems: 'center', paddingVertical, borderRadius: 8, width: 100, height: 50, alignContent: "flex-end" }} onPress={onPress} disabled={disabled}>
-            <Text style={{ color: 'white' }}>
-                {title}
-            </Text>
-        </TouchableOpacity>
-    );
-};
-//Text box
+
+//Text box and text imput
+//Example how to use: 
+//<Input label=[text] value={text} onChangeText={(text) => setText(text)}
+//multiline numberOfLines={4}/>
 const Input = ({ label, ...textInputProps }: TextProps) => {
     return (
         <View style={styles.CommentComponentContainer}>
-            <TextInput {...textInputProps} placeholder={label} placeholderTextColor={"#fffefeff"} style={[styles.textInput, textInputProps.style]} />
+            <TextInput {...textInputProps} placeholder={label} placeholderTextColor={"#fffefeff"}
+                style={[styles.textInput, textInputProps.style]} />
         </View>
     );
 };
 //Error message
+//Example how to use if error occur
+// {error ? <Message message={"error message"} variant='red' /> : null}
 const Message = ({ variant, message }: MessageProps) => {
     return (
         <View>
@@ -55,4 +39,4 @@ const Message = ({ variant, message }: MessageProps) => {
         </View>
     );
 };
-export { Button, Input, Message };
+export { Input, Message };

@@ -20,6 +20,8 @@ import {
   pickRandomLocation,
 } from "../utils/mapHelpers";
 import FilterModal from "../Components/filterModal";
+import { getVisitedLocations } from "../utils/savedVisitedStorage";
+
 
 export default function MapScreen() {
   const mapRef = useRef<MapView>(null!);
@@ -30,6 +32,21 @@ export default function MapScreen() {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(null); // Valittu sijainti modaalia varten
   const [showDistanceText, setShowDistanceText] = useState(false);
+  const [visitedIds, setVisitedIds] = useState<number[]>([]);
+
+  // A state to track visited location and a function to fetch them, this was inside MapMarkers before
+  const fetchVisited = useCallback(async () => {
+    console.log("fetchVisited called");
+    try {
+      const visited = await getVisitedLocations();
+      const ids = visited.map(loc => loc.sportsPlaceId);
+      setVisitedIds(ids);
+    } catch (err) {
+      console.error("Error fetching visited:", err);
+    }
+  }, []);
+  // Popup random kohteeseen
+  const [randomPopup, setRandomPopup] = useState<{ x: number; y: number; text: string } | null>(null);
 
   // Filtering
   const [filterModalVisible, setFilterModalVisible] = useState<boolean>(false);
@@ -78,18 +95,28 @@ export default function MapScreen() {
     }, [userLocation, mapReady, distance, routeLengthFilter])
   );
 
+  // This will make a visited marker to appear on green when user comes back to MapScreen, previously 
+  // it worked only when the screen was initially rendered when the program started
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchVisited();
+    }, [fetchVisited])
+  );
+
   // -------------------- Painikkeet --------------------
   const handleShowMyLocation = () => {
     if (userLocation) animateToUserLocation(mapRef, userLocation);
   };
 
-  const handleRandomLocation = () => {
+  const handleRandomLocation = async () => {
     const location = pickRandomLocation(locationsInBounds);
     if (!location) return;
 
     const coords = getCoordinates(location);
     if (!coords) return;
 
+    // animate to region first
     mapRef.current?.animateToRegion(
       {
         latitude: coords.lat,
@@ -97,11 +124,34 @@ export default function MapScreen() {
         latitudeDelta: 0.1,
         longitudeDelta: 0.1,
       },
-      1000
+      900
     );
+
     setSelectedLocation(location);
-    setTimeout(() => markerRefs.current[location.sportsPlaceId]?.showCallout(), 1000);
+
+
+    setTimeout(async () => {
+      try {
+        markerRefs.current[location.sportsPlaceId]?.showCallout?.();
+      } catch (e) {
+
+      }
+
+
+      try {
+        if (mapRef.current?.pointForCoordinate) {
+          const point = await mapRef.current.pointForCoordinate({ latitude: coords.lat, longitude: coords.lon });
+
+          setRandomPopup({ x: point.x, y: point.y + 40, text: getLocationNameFi(location) });
+
+          setTimeout(() => setRandomPopup(null), 3000);
+        }
+      } catch (err) {
+        console.warn("Could not compute screen point for popup:", err);
+      }
+    }, 950);
   };
+
 
   // ---------------- Suodatus haun ja filtteröinnin mukaan -------------------
   const filteredLocations = locationsInBounds.filter((location) => {
@@ -156,7 +206,12 @@ export default function MapScreen() {
 
 
         {/* Use filtered locations based on the SearchBar input */}
-        <MarkerComponent locations={filteredLocations} markerRefs={markerRefs} onMarkerPress={handleMarkerPress} />
+        <MarkerComponent
+          locations={filteredLocations}
+          markerRefs={markerRefs}
+          onMarkerPress={handleMarkerPress}
+          visitedIds={visitedIds}
+        />
 
         {/* current location  */}
         {userLocation && (
@@ -206,6 +261,15 @@ export default function MapScreen() {
         visible={filterModalVisible}
         onClose={() => setFilterModalVisible(false)}
       />
+      {randomPopup && (<View
+        pointerEvents="none"
+        style={[
+          styles.randomPopup,
+          { left: randomPopup.x - 110, top: randomPopup.y - 10 },
+        ]}
+      >
+        <Text style={styles.randomPopupText}>{randomPopup.text}</Text>
+      </View>)}
     </View>
   );
 }

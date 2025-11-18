@@ -7,15 +7,8 @@ import { Input, Message } from './commentHelpers';
 import Comment from './Comment';
 import { styles } from '../styles';
 import { Ionicons } from '@expo/vector-icons';
+import { CommentType } from '../types/CommentType';
 
-
-export type CommentType = {
-    id: string;
-    details: string;
-    post: {
-        id: string;
-    };
-};
 type Props = {
     modalVisible: boolean;
     setModalVisible: Dispatch<SetStateAction<boolean>>;
@@ -25,10 +18,11 @@ type Props = {
 
 const CommentsModal = ({ modalVisible, setModalVisible, setCommentsTotal, postId }: Props) => {
     const [details, setDetails] = useState<string>('');
+    const [comments, setComments] = useState<CommentType[]>([]);
+
     const [loadingAddComment, setLoadingAddComment] = useState<boolean>(false);
     const [successAddComment, setSuccessAddComment] = useState<boolean>(false);
     const [errorAddComment, setErrorAddComment] = useState<string>('');
-    const [comments, setComments] = useState<CommentType[]>([]);
 
     const [loadingGetComments, setLoadingGetComments] = useState<boolean>(false);
     const [successGetComments, setSuccessGetComments] = useState<boolean>(false);
@@ -37,6 +31,7 @@ const CommentsModal = ({ modalVisible, setModalVisible, setCommentsTotal, postId
     const [errorDeleteComments, setErrorDeleteComments] = useState<string>('');
 
     const commentsCollection = collection(db, 'comments');
+
     //adding comment. postId is same as locationId
     const addComment = async () => {
         setLoadingAddComment(true);
@@ -81,11 +76,11 @@ const CommentsModal = ({ modalVisible, setModalVisible, setCommentsTotal, postId
         setLoadingGetComments(false);
     };
 
-    //Delete comment and confirm deleting
+    //Delete comment and confirm deleting.
     const deleteComment = async (commentId: string, details: string) => {
         Alert.alert('Delete Comment', details, [
             {
-                text: 'Cancel',
+                text: 'CANCEL',
                 onPress: () => { },
                 style: 'cancel',
             },
@@ -105,13 +100,13 @@ const CommentsModal = ({ modalVisible, setModalVisible, setCommentsTotal, postId
             },
         ]);
     };
-    //rerenders comments after commenting or deleting
+    //get comments from database after commenting or deleting
     useEffect(() => {
         getComments();
     }, [successAddComment, successDeleteComments]);
     return (
         <Modal
-            animationType="slide"
+            animationType="fade"
             transparent={true}
             visible={modalVisible}
             onRequestClose={() => {
@@ -131,7 +126,7 @@ const CommentsModal = ({ modalVisible, setModalVisible, setCommentsTotal, postId
                     {loadingAddComment ? <ActivityIndicator size='large' /> : null}
                     {errorAddComment ? <Message message={errorAddComment} variant='red' /> : null}
                     <View style={{ paddingTop: 20 }}>
-                        {/*Text box*/}
+                        {/*Text box set to be 4 lines*/}
                         <Input label=' Kirjoita kommentti' value={details} onChangeText={(text) => setDetails(text)} multiline numberOfLines={4} style={styles.textArea} />
                         {/*Comment "Button"*/}
                         <TouchableOpacity
@@ -141,7 +136,6 @@ const CommentsModal = ({ modalVisible, setModalVisible, setCommentsTotal, postId
                         >
                             <View style={styles.commentButton}>
                                 <Text style={styles.commentButtonText}>KOMMENTOI</Text>
-
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -150,6 +144,7 @@ const CommentsModal = ({ modalVisible, setModalVisible, setCommentsTotal, postId
                 <View style={styles.line} />
                 {loadingGetComments ? <ActivityIndicator size='large' /> : null}
                 {errorGetComments ? <Message message={errorGetComments} variant='red' /> : null}
+
                 <FlatList
                     data={comments}
                     renderItem={({ item }) => <Comment item={item} deleteComment={deleteComment} />}

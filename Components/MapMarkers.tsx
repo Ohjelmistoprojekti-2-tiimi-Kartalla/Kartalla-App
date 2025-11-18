@@ -1,4 +1,5 @@
 import { Marker } from "react-native-maps";
+import { Marker } from "react-native-maps";
 import { Location } from "../types/Location";
 import { getCoordinates } from "../utils/mapUtils";
 // import { useNavigation } from "@react-navigation/native";
@@ -12,6 +13,7 @@ interface Props {
     locations: Location[];
     markerRefs: React.MutableRefObject<{ [key: number]: any | null }>;
     onMarkerPress: (location: Location) => void; // callback modaalin avaamiseen
+    visitedIds: number[];
 }
 
 export const MarkerComponent: React.FC<Props> = ({ locations, markerRefs, onMarkerPress }) => {
@@ -48,7 +50,7 @@ export const MarkerComponent: React.FC<Props> = ({ locations, markerRefs, onMark
                     <Marker
                         ref={ref => { markerRefs.current[location.sportsPlaceId] = ref; }}
                         coordinate={{ latitude: coords.lat, longitude: coords.lon }}
-                        key={location.sportsPlaceId}
+                        key={`${location.sportsPlaceId}-${visitedIds.includes(location.sportsPlaceId) ? 'v' : 'n'}`} // Added visitedIs to allow to show visited marker on green when coming back to Mapscreen
                         onPress={() => onMarkerPress(location)} // MapScreen käsittelee modaalin avaamisen
                         pinColor={markerColor} // MarkerColor added
                     />

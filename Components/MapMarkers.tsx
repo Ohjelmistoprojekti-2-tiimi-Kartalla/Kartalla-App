@@ -1,9 +1,6 @@
 import { Marker } from "react-native-maps";
-import { Marker } from "react-native-maps";
 import { Location } from "../types/Location";
 import { getCoordinates } from "../utils/mapUtils";
-// import { useNavigation } from "@react-navigation/native";
-// import type { StackNavigationProp } from '@react-navigation/stack';
 import { getVisitedLocations } from "../utils/savedVisitedStorage";
 import React from "react";
 import { useState, useEffect } from "react";

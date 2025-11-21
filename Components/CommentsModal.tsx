@@ -1,5 +1,5 @@
 import { ActivityIndicator, Alert, FlatList, Text, View, TouchableOpacity } from 'react-native';
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react';
 import { Modal } from 'react-native';
 import { addDoc, collection, deleteDoc, doc, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
@@ -8,6 +8,7 @@ import Comment from './Comment';
 import { styles } from '../styles';
 import { Ionicons } from '@expo/vector-icons';
 import { CommentType } from '../types/CommentType';
+import { Rating } from '@kolking/react-native-rating';
 
 type CommentsModalProps = {
     modalVisible: boolean;
@@ -19,6 +20,7 @@ type CommentsModalProps = {
 const CommentsModal = ({ modalVisible, setModalVisible, setCommentsTotal, postId }: CommentsModalProps) => {
     const [details, setDetails] = useState<string>('');
     const [comments, setComments] = useState<CommentType[]>([]);
+    const [rating, setRating] = useState<number>(0);
 
     const [loadingAddComment, setLoadingAddComment] = useState<boolean>(false);
     const [successAddComment, setSuccessAddComment] = useState<boolean>(false);
@@ -31,6 +33,11 @@ const CommentsModal = ({ modalVisible, setModalVisible, setCommentsTotal, postId
 
     const commentsCollection = collection(db, 'comments');
 
+    const handleStarRatingChange = useCallback(
+        (value: number) => setRating(Math.round((rating + value) * 5) / 10),
+        [rating],
+    );
+
     //adding comment. postId is same as locationId
     const addComment = async () => {
         setLoadingAddComment(true);
@@ -39,6 +46,7 @@ const CommentsModal = ({ modalVisible, setModalVisible, setCommentsTotal, postId
         try {
             const commentItem = {
                 details,
+                rating,
                 post: {
                     id: postId
                 },
@@ -46,6 +54,7 @@ const CommentsModal = ({ modalVisible, setModalVisible, setCommentsTotal, postId
             await addDoc(commentsCollection, commentItem);
             setSuccessAddComment(true);
             setDetails('');
+            setRating(0);
         } catch (error: any) {
             setSuccessAddComment(false);
             setErrorAddComment(error?.message || "An error occured while adding comment");
@@ -127,17 +136,24 @@ const CommentsModal = ({ modalVisible, setModalVisible, setCommentsTotal, postId
                     <View style={{ paddingTop: 20 }}>
                         {/*Text box set to be 4 lines*/}
                         <Input label=' Kirjoita kommentti' value={details} onChangeText={(text) => setDetails(text)} multiline numberOfLines={4} style={styles.textArea} />
+                        <View style={{ paddingLeft: 40 }}>
+                            <Rating size={30} rating={rating} onMove={handleStarRatingChange} onChange={handleStarRatingChange} />
+                            <Text style={styles.starRatingText}>Rated {rating} out of 5</Text>
+                        </View>
+
                         {/*Comment "Button"*/}
-                        <TouchableOpacity
+                        <TouchableOpacity style={{ paddingLeft: 40 }}
                             onPress={() => {
                                 addComment();
-                            }} disabled={!details || loadingAddComment}
+                            }} disabled={!details || loadingAddComment || rating == 0}
                         >
                             <View style={styles.commentButton}>
                                 <Text style={styles.commentButtonText}>KOMMENTOI</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
+
+
                 </View>
                 {/*Error messages and loading icon when getting comments*/}
                 <View style={styles.line} />
@@ -155,5 +171,9 @@ const CommentsModal = ({ modalVisible, setModalVisible, setCommentsTotal, postId
         </Modal>
     );
 };
+
+
+;
+
 
 export default CommentsModal;

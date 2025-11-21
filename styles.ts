@@ -782,8 +782,10 @@ export const styles = StyleSheet.create({
     borderColor: 'rgba(255,255,255,0.1)',
     borderRadius: 12,
     padding: 14,
-
-
+  },
+  starRatingText: {
+    fontSize: 17,
+    marginTop: 20,
   },
   commentButtonText: {
     color: '#ddd',
@@ -822,6 +824,11 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     textAlign: 'center',
+  },
+  root: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
 

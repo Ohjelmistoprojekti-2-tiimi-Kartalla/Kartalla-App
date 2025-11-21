@@ -1,6 +1,7 @@
 export type CommentType = {
     id: string;
     details: string;
+    rating: number;
     post: {
         id: string;
     };

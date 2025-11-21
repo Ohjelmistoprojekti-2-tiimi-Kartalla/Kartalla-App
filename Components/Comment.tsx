@@ -6,7 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 type CommentProps = {
     item: CommentType;
-    deleteComment: (commentId: string, details: string) => void;
+    deleteComment: (commentId: string, details: string, rating?: number) => void;
 
 };
 
@@ -15,6 +15,7 @@ const Comment = ({ item, deleteComment }: CommentProps) => {
     return (
         <View style={{ flexDirection: "column", borderWidth: 1, borderColor: "white" }}>
             <Text style={styles.description}>{item.details}</Text>
+            <Text style={{ fontSize: 10, color: "white" }}>Arvio: {item.rating}</Text>
             <View style={{ alignSelf: "flex-end", padding: 2 }}>
                 {/* icon to delete comment */}
                 {/* No authorization implemented */}
@@ -23,7 +24,6 @@ const Comment = ({ item, deleteComment }: CommentProps) => {
                     <Ionicons name="trash-outline" size={20} color="#ff6b6b" style={{ padding: 2 }} />
                 </TouchableOpacity>
             </View>
-
         </View>
     );
 };

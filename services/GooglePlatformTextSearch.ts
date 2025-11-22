@@ -1,15 +1,18 @@
+import {
+GooglePlacesSearchResponse, PlacePhoto, PlaceWithPhotos
+} from '../types/GooglePlaces.types';
 
-//Palauttaa koko places JSON 
-const getGooglePlacesFromPlatform = (textQuery) => {
+// Returns the whole place object from Google Places Platform
+const getGooglePlacesFromPlatform = (textQuery: string): Promise<PlaceWithPhotos[]> => {
   return fetch('https://places.googleapis.com/v1/places:searchText?alt=json&fields=*&prettyPrint=true', {
-    method:'POST',
-    headers:{
-    Authorization: 'Bearer ' + process.env.GOOGLEPLATFORM_API_KEY,
-    Accept: "application/json",
-    'Content-Type': 'application/json'
+    method: 'POST',
+    headers: {
+      Authorization: 'Bearer ' + process.env.GOOGLEPLATFORM_API_KEY,
+      Accept: "application/json",
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-        "textQuery": {textQuery}
+      "textQuery": { textQuery }
     })
   })
     .then(response => response.json())
@@ -22,16 +25,16 @@ const getGooglePlacesFromPlatform = (textQuery) => {
 };
 
 //Returns Google image from first author
-const getGoogleImageFromPlatform = (textQuery) => {
+const getGoogleImageFromPlatform = (textQuery: string): Promise<PlacePhoto[]> => {
   return fetch('https://places.googleapis.com/v1/places:searchText?alt=json&fields=*&prettyPrint=true', {
-    method:'POST',
-    headers:{
-    Authorization: 'Bearer ' + process.env.GOOGLEPLATFORM_API_KEY,
-    Accept: "application/json",
-    'Content-Type': 'application/json'
+    method: 'POST',
+    headers: {
+      Authorization: 'Bearer ' + process.env.GOOGLEPLATFORM_API_KEY,
+      Accept: "application/json",
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-        "textQuery": {textQuery}
+      "textQuery": { textQuery }
     })
   })
     .then(response => response.json())
@@ -44,16 +47,16 @@ const getGoogleImageFromPlatform = (textQuery) => {
 };
 
 //Returns multiple images from platrform, photos contains informations about author also.
-const getGoogleMultipleImageFromPlatform = (textQuery) => {
+const getGoogleMultipleImageFromPlatform = (textQuery: string): Promise<PlacePhoto[]> => {
   return fetch('https://places.googleapis.com/v1/places:searchText?alt=json&fields=*&prettyPrint=true', {
-    method:'POST',
-    headers:{
-    Authorization: 'Bearer ' + process.env.GOOGLEPLATFORM_API_KEY,
-    Accept: "application/json",
-    'Content-Type': 'application/json'
+    method: 'POST',
+    headers: {
+      Authorization: 'Bearer ' + process.env.GOOGLEPLATFORM_API_KEY,
+      Accept: "application/json",
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-        "textQuery": textQuery
+      "textQuery": textQuery
     })
   })
     .then(response => response.json())
@@ -65,4 +68,4 @@ const getGoogleMultipleImageFromPlatform = (textQuery) => {
     });
 };
 
-export {getGoogleImageFromPlatform, getGoogleMultipleImageFromPlatform, getGooglePlacesFromPlatform}
+export { getGoogleImageFromPlatform, getGoogleMultipleImageFromPlatform, getGooglePlacesFromPlatform }

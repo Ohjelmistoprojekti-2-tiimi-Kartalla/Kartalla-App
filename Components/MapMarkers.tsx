@@ -13,24 +13,9 @@ interface MapMarkersProps {
     visitedIds: number[];
 }
 
-export const MarkerComponent: React.FC<MapMarkersProps> = ({ locations, markerRefs, onMarkerPress }) => {
+export const MarkerComponent: React.FC<MapMarkersProps> = ({ locations, markerRefs, onMarkerPress, visitedIds }) => {
 
-    // Saves visited
-    const [visitedIds, setVisitedIds] = useState<number[]>([]);
 
-    // Fetch visited when the component is rendered
-    useEffect(() => {
-        const fetchVisited = async () => {
-            try {
-                const visited = await getVisitedLocations();
-                const ids = visited.map((loc) => loc.sportsPlaceId);
-                setVisitedIds(ids);
-            } catch (error) {
-                console.error("Error fetching visited locations:", error);
-            }
-        };
-        fetchVisited();
-    }, []);
 
     console.log("Renderöitäviä markkereita:", locations.length);
     return (

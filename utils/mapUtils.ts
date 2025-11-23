@@ -1,4 +1,5 @@
 import { Location } from "../types/Location";
+import { BoundingBox } from "../types/BoundingBox";
 
 export function getCoordinates(location: Location): { lat: number; lon: number } | null {
   // coordinates can come either from location.coordinates.wgs84 or location.geometries.features[0], see Location.ts
@@ -25,5 +26,18 @@ export function getCoordinates(location: Location): { lat: number; lon: number }
     }
   }
   return null;
+}
+
+// returns a square bounding box around a location with given distance in kilometers
+export function getBoundingBoxFromLocation(lat: number, lon: number, deltaKm = 50): BoundingBox {
+
+  const delta = deltaKm / 111;
+
+  return new BoundingBox(
+    lat + delta,
+    lat - delta,
+    lon + delta,
+    lon - delta
+  );
 }
 

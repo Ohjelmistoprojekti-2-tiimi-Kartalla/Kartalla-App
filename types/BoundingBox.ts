@@ -21,16 +21,3 @@ export class BoundingBox {
     }
 }
 
-// returns a square bounding box around a location with given distance in kilometers
-export function getBoundingBoxFromLocation(lat: number, lon: number, deltaKm = 50): BoundingBox {
-
-  const delta = deltaKm / 111;
-
-  return new BoundingBox(
-    lat + delta,
-    lat - delta,
-    lon + delta,
-    lon - delta
-  );
-}
-

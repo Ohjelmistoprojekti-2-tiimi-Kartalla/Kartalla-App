@@ -6,11 +6,11 @@ Tässä Ohjelmistokehityksen teknologioita -kurssin seminaari tehtävässä kehi
 
 - Parantaa projektin koodin laatua ja luotettavuutta hyödyntämällä TypeScriptin ominaisuuksia entistä paremmin.
 - Yhdenmukaistaa TypeScriptin käyttöä projektissa
-- Kirkastaa itselle, mitkä ovat suositeltuja tapoja TypeScriptin yhteydessä ja miksi mitäkin tapaa käytetään
+- Kirkastaa itselle, mitkä ovat suositeltuja tapoja TypeScriptin perusasioiden yhteydessä ja miksi mitäkin tapaa käytetään
 
 ## Lähtötilanne ja projektin kuvaus
 
-Lähtökohtana on Ohjelmistoprojekti 2 -kurssilla tehty luontokohteita hakeva Kartalla-sovellus, jota on kehitetty 5 hengen tiimissä muutaman kuukauden ajan. Kyseessä on React Nativella kehitetty mobiilisovellus, jossa on jo käytetty TypeScriptiä, mutta sen käyttöä voisi yhdenmukaistaa ja parantaa. 
+Lähtökohtana on Ohjelmistoprojekti 2 -kurssilla tehty luontokohteita hakeva Kartalla-sovellus, jota on kehitetty 5 hengen tiimissä muutaman kuukauden ajan. Kyseessä on React Nativella kehitetty mobiilisovellus, jossa on jo käytetty TypeScriptiä, mutta sen käyttöä voisi yhdenmukaistaa ja parantaa. Myös oma TypeScript-ymmärrykseni kaipasi kehittämistä, sillä vaikka olin käyttänyt sitä aiemmin.
 
 ## Tyyppinen määrittely yhdenmukaisesti ja riittävällä tarkkuudella
 
@@ -37,7 +37,7 @@ const [mapReady, setMapReady] = useState<boolean>(false);
 ```
 #### Eksplisiittinen määrittely (Explicit types)
 
-Tyypit kannattaa määritellä eksplisiittiseti  funktioiden parametreille, objekteille ja sovelluksen osille, jotka ovat koko sovelluksen toiminnan kannalta kannalta erityisen kriittisiä. Tällaisiä kriittisiä osia ovat esimerkiksi API-vastaukset (esim. projektissa tyyppi Location on tällainen). Kun TypeScrip ei pysty päättelemään tyyppiä, se antaa sille tyypiksi any. Any-tyyppiä olisi hyvä välttää aina kun mahdollista.
+Tyypit kannattaa määritellä eksplisiittiseti  funktioiden parametreille, objekteille ja sovelluksen osille, jotka ovat koko sovelluksen toiminnan kannalta kannalta erityisen kriittisiä. Tällaisiä kriittisiä osia ovat esimerkiksi API-vastaukset (esim. projektissa tyyppi Location on tällainen). Kun TypeScrip ei pysty päättelemään tyyppiä, se antaa sille tyypiksi any. Any-tyyppiä olisi hyvä välttää aina kun mahdollista, sillä se kytkee tyyppitarkastukset ikään kuin pois päältä kyseisessä kohdassa. Jos tyyppi ei ole tiedossa tai sillä ei ole merkitystä, on turvallisempaa käyttää anyn sijaan unknown.
 
 Tarkastin kaikista projektin funktioista määrittyykö niiden paluuarvot automaattisesti ja jätin määrittelemättä explisiittisesti ne funktiot, joissa TypeScript osaa määritellä paluuarvon. Paluuarvon tyypin päättelyn voi tarkistaa pitämällä hiirtä muuttujan tai funktion nimen päällä: 
 
@@ -46,30 +46,62 @@ Tarkastin kaikista projektin funktioista määrittyykö niiden paluuarvot automa
 Projektissa oli keskeneräinen toiminto, jolla oli tarkoitus hakea kuvia Google Places -rajapinnan kautta. Rajapintaa kutsuvissa funktioissa ei oltu määritelty paramenterin tyyppiä eikä palautettavan objektin tyyppiä, joten muodostin tyypit ja asetin ne funktioihin (Commit b13c4e8 "Create types for fetching images from Google Places").
 
 Ennen: 
+
 ![ennen](image-1.png)
 
 Jälkeen:
+
 ![jälkeen](image-2.png)
 
 
 Myös komponenttien propsien tyypit on hyvä määritellä ja ennen kaikkea nimetä kuvaavasti. Propsien tyypit oli projektissa jo hyvin määritelty, mutta niiden nimeämisessä oli parannettavaa. Nimesin kaikki propsit, niin että nimestä kävisi ilmi sen käyttötarkoitus. Kuvaava nimi on tärkeää varsinkin silloin kun propseilla välitetään tietoa komponenttien välillä.
 
-### Type, Interface vai Class?
+### Typen, Interfacen ja Classin käyttö
 
+#### Tyyppimäärittelyjen sijoittuminen projektiin tiedostoihin
+
+Varsinkin isommissa projekteissa tyypit kannattaa pitää organisoidusti yhdessä paikassa. Projektissamme oli types-kansio, jossa oli alkuun vain pari tyyppiä omina tiedostoinaan. Paljon tyyppejä oli esimerkiksi komponenteissa ja niiden suhteen voisi vielä pohtia pitäisikö niitä siirtää omiin tiedostoihin.
+
+#### Yhdenmukainen käyttö
+
+Type ja interface toimivat monin osin samalla tavalla ja vain syntaksissa on hieman eroa. Ilmeisesti on suositeltavaa käyttää lähtökohtaisesti interfacea (esim. W3Schools suosittaa sitä lähtökohtaisesti). Type sopii hyvin esim. unionien ja tuplejen kanssa käytettäväksi. Käytön yhdenmukaisuuden tarkastaminen jäi minulta kesken.
+
+Olennaista tässäkin on käyttää saman projekti sisällä niitä yhdenmukaisesti. Myös se, käytetäänkö puolipistettä, pilkkua tai ei mitään on hyvä olla johdonmukaisesti samalla tavalla koko projektissa. Projektissa käytettiin määrittelyissä puolipistettä.
 
 ## Kääntäjän virheiden tarkastuksen ja tarkkuuden asetukset
 
-tsconfig-tiedostossa voi määritellä ComplilerOptions-asetukset, jotka määrittävät miten TypeScript-kääntäjä tarkastaa ja kääntää koodin. 
+tsconfig-tiedostossa voi määritellä ComplilerOptions-asetukset, jotka määrittävät miten TypeScript-kääntäjä tarkastaa ja kääntää koodin. Suosituksena on käyttää tiukkoja asetuksia, jotka tekevät mahdollisimman paljon tarkastuksia. Asetin projektiin alla olevat asetukset.
 
 ```
    "compilerOptions": {
-     "strict": true,
-     "noUnusedLocals": true,
+    "strict": true,
+    "noUnusedLocals": true,
     "noUnusedParameters": true
   },
 
 ```
+W3Schools suoittaa vielä enemmän tarkastuksia ja näitä olisi voinut lisätä projektiin vielä lisää. Alla W3Schoolsin suosittamat:
 
+```
+{
+  "compilerOptions": {
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true
+  }
+}
+
+```
+
+
+## Ajautukset jatkoon
+
+Ehdin käsitellä tässä seminaarityössä vain muutamia TypeScriptin käyttöön liittyviä asioita, joten paljon jäi vielä perehtymättä. Työ jäi valitettavasti ajan puutteen vuoksi myös kesken, mutta päätin palauttaa kuitenkin keskeneräisen version.
 
 ## Lähteet
 
@@ -82,6 +114,8 @@ tsconfig-tiedostossa voi määritellä ComplilerOptions-asetukset, jotka määri
 [TypeScript Explicit Types and Inference](https://www.w3schools.com/typescript/typescript_explicit_inference.php)
 
 [The TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/intro.html)
+
+[TypeScript Interfaces vs Types](https://www.youtube.com/watch?v=crjIq7LEAYw)
 
 [TypeScript Tutorial for Beginners](https://www.youtube.com/watch?v=d56mG7DezGs)
 

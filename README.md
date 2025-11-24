@@ -4,6 +4,14 @@ Kartalla is a mobile application that helps users discover nature destinations a
 
 The app is built with React Native and Expo, database is implemented with SQLite/Firebase and the code is written in TypeScript. We're aiming to publish the app in app stores.
 
+Some screenshots of the application at the moment:
+
+<img src="images/IMG_4403.PNG" alt="screenshot 1" width="200"/>
+<img src="images/IMG_4404.PNG" alt="screenshot 2" width="200">
+<img src="images/IMG_4405.PNG" alt="screenshot 3" width="200">
+<img src="images/IMG_4406.PNG" alt="screenshot 4" width="200">
+
+
 ## Installation
 
 ### Prerequisites

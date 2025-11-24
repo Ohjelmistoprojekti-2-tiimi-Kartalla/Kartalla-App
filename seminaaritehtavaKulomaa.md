@@ -41,15 +41,15 @@ Tyypit kannattaa määritellä eksplisiittiseti  funktioiden parametreille, obje
 
 Tarkastin kaikista projektin funktioista määrittyykö niiden paluuarvot automaattisesti ja jätin määrittelemättä explisiittisesti ne funktiot, joissa TypeScript osaa määritellä paluuarvon. Paluuarvon tyypin päättelyn voi tarkistaa pitämällä hiirtä muuttujan tai funktion nimen päällä: 
 
-![funktion päällä hoveroiminen](image.png)
+![funktion päällä hoveroiminen](images/image.png)
 
 Projektissa oli keskeneräinen toiminto, jolla oli tarkoitus hakea kuvia Google Places -rajapinnan kautta. Rajapintaa kutsuvissa funktioissa ei oltu määritelty paramenterin tyyppiä eikä palautettavan objektin tyyppiä, joten muodostin tyypit ja asetin ne funktioihin (Commit b13c4e8 "Create types for fetching images from Google Places").
 
 Ennen: 
-![ennen](image-1.png)
+![ennen](images/image-1.png)
 
 Jälkeen:
-![jälkeen](image-2.png)
+![jälkeen](images/image-2.png)
 
 
 Myös komponenttien propsien tyypit on hyvä määritellä ja ennen kaikkea nimetä kuvaavasti. Propsien tyypit oli projektissa jo hyvin määritelty, mutta niiden nimeämisessä oli parannettavaa. Nimesin kaikki propsit, niin että nimestä kävisi ilmi sen käyttötarkoitus. Kuvaava nimi on tärkeää varsinkin silloin kun propseilla välitetään tietoa komponenttien välillä.

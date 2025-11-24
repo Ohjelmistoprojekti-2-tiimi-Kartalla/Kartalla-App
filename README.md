@@ -80,4 +80,4 @@ Scan the QR code in your terminal to open the Expo Go app on your phone
 
 ## Licencing
 
-The repository is licenced by [MIT licence.] (linkki lisensointitiedostoon tähän)
+The repository is licenced by [MIT licence.](https://github.com/Ohjelmistoprojekti-2-tiimi-Kartalla/Kartalla-App/blob/main/LICENCE.txt)

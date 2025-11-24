@@ -1,9 +1,7 @@
 import { Marker } from "react-native-maps";
 import { Location } from "../types/Location";
 import { getCoordinates } from "../utils/mapUtils";
-import { getVisitedLocations } from "../utils/savedVisitedStorage";
 import React from "react";
-import { useState, useEffect } from "react";
 
 //Component receives the data as props
 interface MapMarkersProps {
@@ -14,8 +12,6 @@ interface MapMarkersProps {
 }
 
 export const MarkerComponent: React.FC<MapMarkersProps> = ({ locations, markerRefs, onMarkerPress, visitedIds }) => {
-
-
 
     console.log("Renderöitäviä markkereita:", locations.length);
     return (

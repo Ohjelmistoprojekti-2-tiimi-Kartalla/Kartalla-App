@@ -1,4 +1,3 @@
-
 import { Text, TextInput, TextInputProps, View } from 'react-native';
 import React from 'react';
 import { styles } from '../styles';
@@ -10,11 +9,6 @@ type TextProps = TextInputProps & {
 type MessageProps = {
     variant: 'green' | 'blue' | 'red';
     message: string;
-};
-const colors = {
-    blue: '#007bff',
-    green: "#28a745",
-    red: "#dc3545",
 };
 
 //Text box and text imput

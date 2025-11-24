@@ -10,8 +10,6 @@ import DestinationDetailsScreen from './screens/DestinationDetailsScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import DestinationListScreen from './screens/DestinationListScreen';
 import { SettingsProvider } from "./utils/SettingsContext";
-import CommentScreen from './screens/CommentScreen';
-
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator<any>();
@@ -29,9 +27,10 @@ function MapStack() {
       />
       <Stack.Screen
         name="DestinationDetails"
-        component={DestinationDetailsScreen}
         options={{ title: "Kohteen tiedot" }}
-      />
+      >
+        {(props) => <DestinationDetailsScreen {...(props as any)} />}
+      </Stack.Screen>
     </Stack.Navigator>
   );
 }

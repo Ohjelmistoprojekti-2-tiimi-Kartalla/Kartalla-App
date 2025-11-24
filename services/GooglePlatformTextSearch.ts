@@ -1,6 +1,4 @@
-import {
-GooglePlacesSearchResponse, PlacePhoto, PlaceWithPhotos
-} from '../types/GooglePlaces.types';
+import {PlacePhoto, PlaceWithPhotos} from '../types/GooglePlaces.types';
 
 // Returns the whole place object from Google Places Platform
 const getGooglePlacesFromPlatform = (textQuery: string): Promise<PlaceWithPhotos[]> => {

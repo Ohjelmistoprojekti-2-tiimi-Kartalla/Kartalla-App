@@ -1,5 +1,5 @@
 import { describe, expect, test } from '@jest/globals';
-import { getBoundingBoxFromLocation } from '../types/BoundingBox';
+import { getBoundingBoxFromLocation } from './mapUtils';
 
 describe('getBoundingBoxFromLocation', () => {
     test('should return correct bounding box for given location and given distance', () => {

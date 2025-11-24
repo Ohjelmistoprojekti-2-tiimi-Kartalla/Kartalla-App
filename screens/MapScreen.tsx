@@ -6,14 +6,14 @@ import { MarkerComponent } from "../Components/MapMarkers";
 import { styles } from "../styles";
 import { fetchNatureLocations } from "../services/lipasService";
 import { Location } from "../types/Location";
-import { getBoundingBoxFromLocation } from "../types/BoundingBox";
+import { getBoundingBoxFromLocation } from "../utils/mapUtils";
 import { getCoordinates } from "../utils/mapUtils";
 import { Ionicons } from "@expo/vector-icons";
 import ModalCard from "../Components/ModalCard";
 import { useSettings } from "../utils/SettingsContext";
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback } from "react";
-import { getLocationNameFi,requestUserLocation, animateToUserLocation, pickRandomLocation} from "../utils/mapHelpers";
+import { getLocationNameFi, requestUserLocation, animateToUserLocation, pickRandomLocation } from "../utils/mapHelpers";
 import FilterModal from "../Components/filterModal";
 import { getVisitedLocations } from "../utils/savedVisitedStorage";
 
